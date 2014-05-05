@@ -9,6 +9,8 @@
 #include <opencv2/core/core.hpp> // Mat
 #include <opencv2/highgui/highgui.hpp> // VideoCapture
 
+static void printProperties(cv::VideoCapture& cap);
+
 int main(int argc, char *argv[]) {
 	// Configuration
 	const int delay = 10;
@@ -44,4 +46,14 @@ int main(int argc, char *argv[]) {
 	}
 
 	return 0;
+}
+
+// Prints some properties of `cap` into `std::cout`
+// http://docs.opencv.org/modules/highgui/doc/reading_and_writing_images_and_video.html#videocapture-get
+static void printProperties(cv::VideoCapture& cap) {
+	std::cout << "Frame width: " << cap.get(CV_CAP_PROP_FRAME_WIDTH) << std::endl;
+	std::cout << "Frame height: " << cap.get(CV_CAP_PROP_FRAME_HEIGHT) << std::endl;
+	std::cout << "FPS: " << cap.get(CV_CAP_PROP_FPS) << std::endl;
+	std::cout << "Mode: " << cap.get(CV_CAP_PROP_MODE) << std::endl;
+	std::cout << "Format: " << cap.get(CV_CAP_PROP_FORMAT) << std::endl;
 }
