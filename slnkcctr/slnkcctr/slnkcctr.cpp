@@ -4,6 +4,7 @@
 #include "stdafx.h"
 
 #include <iostream> // cout
+#include <iomanip> // setiosflags, setprecision
 
 #include <opencv2/core/core.hpp> // Mat
 #include <opencv2/highgui/highgui.hpp> // VideoCapture
@@ -13,6 +14,9 @@ int main(int argc, char *argv[]) {
 	const int delay = 10;
 	const char* WIN_MAIN = "slnkcctr";
 	const char KEY_ESC = (char)27;
+
+	// Format `double` output
+	std::cout << std::setiosflags(std::ios::fixed) << std::setprecision(3);
 
 	// Print instructions
 	std::cout << "Exit by pressing Escape." << std::endl;
