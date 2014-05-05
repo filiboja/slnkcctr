@@ -16,6 +16,8 @@ int main(int argc, char *argv[]) {
 	const int delay = 10;
 	const char* WIN_MAIN = "slnkcctr";
 	const char KEY_ESC = (char)27;
+	double frameWidth = 640.0;
+	double frameHeight = 480.0;
 
 	// Format `double` output
 	std::cout << std::setiosflags(std::ios::fixed) << std::setprecision(3);
@@ -29,6 +31,13 @@ int main(int argc, char *argv[]) {
 		std::cout << "Could not open video stream." << std::endl;
 		return 1;
 	}
+
+	// Print camera info
+	printProperties(video);
+
+	// Set
+	std::cout << "Set frame width: " << video.set(CV_CAP_PROP_FRAME_WIDTH, frameWidth) << std::endl;
+	std::cout << "Set frame height: " << video.set(CV_CAP_PROP_FRAME_HEIGHT, frameHeight) << std::endl;
 
 	// Print camera info
 	printProperties(video);
