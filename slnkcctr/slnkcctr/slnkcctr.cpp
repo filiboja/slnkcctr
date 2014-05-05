@@ -29,6 +29,9 @@ int main(int argc, char *argv[]) {
 		std::cout << "Could not open video stream." << std::endl;
 		return 1;
 	}
+
+	// Print camera info
+	printProperties(video);
 	
 	// Open window
 	cv::namedWindow(WIN_MAIN, CV_WINDOW_AUTOSIZE);
