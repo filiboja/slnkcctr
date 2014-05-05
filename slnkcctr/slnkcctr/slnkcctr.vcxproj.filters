@@ -29,7 +29,7 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="slnkcctr.cpp">
+    <ClCompile Include="..\..\..\..\..\..\..\opencv\sources\samples\cpp\tutorial_code\introduction\windows_visual_studio_Opencv\introduction_windows_vs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
