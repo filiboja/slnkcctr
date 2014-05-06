@@ -6,8 +6,6 @@
 // std::
 #include <iostream> // cout, endl
 #include <iomanip> // setiosflags, setprecision
-#include <set> // set
-#include <utility> // pair
 
 // cv::
 #include <opencv2/core/core.hpp> // Mat
