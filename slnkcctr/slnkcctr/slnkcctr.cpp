@@ -34,9 +34,6 @@ int main(int argc, char *argv[]) {
 		return 1;
 	}
 
-	// Print camera info
-	printProperties(video);
-
 	// Set
 	std::cout << "Set frame width: " << video.set(CV_CAP_PROP_FRAME_WIDTH, frameWidth) << std::endl;
 	std::cout << "Set frame height: " << video.set(CV_CAP_PROP_FRAME_HEIGHT, frameHeight) << std::endl;
