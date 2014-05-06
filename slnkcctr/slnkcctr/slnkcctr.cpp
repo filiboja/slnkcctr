@@ -3,9 +3,11 @@
 
 #include "stdafx.h"
 
+// std::
 #include <iostream> // cout, endl
 #include <iomanip> // setiosflags, setprecision
 
+// cv::
 #include <opencv2/core/core.hpp> // Mat
 #include <opencv2/highgui/highgui.hpp> // VideoCapture
 
