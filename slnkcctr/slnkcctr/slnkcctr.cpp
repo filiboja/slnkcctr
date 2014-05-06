@@ -13,8 +13,7 @@
 #include <opencv2/core/core.hpp> // Mat
 #include <opencv2/highgui/highgui.hpp> // VideoCapture
 
-static void initProperties();
-static void printProperties(cv::VideoCapture& cap);
+#include "CaptureProperties.h" // CaptureProperties
 
 int main(int argc, char *argv[]) {
 	// Configuration
@@ -24,7 +23,7 @@ int main(int argc, char *argv[]) {
 	double frameWidth = 640.0;
 	double frameHeight = 480.0;
 
-	initProperties();
+	CaptureProperties capProps;
 
 	// Format `double` output
 	std::cout << std::setiosflags(std::ios::fixed) << std::setprecision(3);
@@ -44,7 +43,7 @@ int main(int argc, char *argv[]) {
 	std::cout << "Set frame height: " << video.set(CV_CAP_PROP_FRAME_HEIGHT, frameHeight) << std::endl;
 
 	// Print camera info
-	printProperties(video);
+	capProps.print(video);
 	
 	// Open window
 	cv::namedWindow(WIN_MAIN, CV_WINDOW_AUTOSIZE);
@@ -62,31 +61,4 @@ int main(int argc, char *argv[]) {
 	}
 
 	return 0;
-}
-
-// http://en.cppreference.com/w/cpp/language/enum
-typedef int PropertyBase;
-
-// <index, description>
-typedef std::pair<const PropertyBase, const char * const> Property;
-typedef std::set<Property> Properties;
-
-static Properties properties;
-
-static void initProperties() {
-	properties.insert(Property(CV_CAP_PROP_FRAME_WIDTH, "Frame width"));
-	properties.insert(Property(CV_CAP_PROP_FRAME_HEIGHT, "Frame height"));
-	properties.insert(Property(CV_CAP_PROP_FPS, "FPS"));
-	properties.insert(Property(CV_CAP_PROP_MODE, "Mode"));
-	properties.insert(Property(CV_CAP_PROP_FORMAT, "Format"));
-}
-
-// Prints some properties of `cap` into `std::cout`
-// http://docs.opencv.org/modules/highgui/doc/reading_and_writing_images_and_video.html#videocapture-get
-static void printProperties(cv::VideoCapture& cap) {
-	for (Properties::iterator it=properties.begin(); it!=properties.end(); ++it) {
-		const PropertyBase& index = it->first;
-		const char * const& description = it->second;
-		std::cout << description << ": " << cap.get(index) << std::endl;
-	}
 }
