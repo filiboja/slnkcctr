@@ -23,7 +23,7 @@ int main(int argc, char *argv[]) {
 	std::cout << std::setiosflags(std::ios::fixed) << std::setprecision(3);
 
 	// Print instructions
-	std::cout << "Exit by pressing Escape." << std::endl;
+	std::cout << "Press Escape to exit." << std::endl;
 
 	// Open video stream
 	cv::VideoCapture video(0);
