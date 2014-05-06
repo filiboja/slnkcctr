@@ -6,11 +6,14 @@
 // std::
 #include <iostream> // cout, endl
 #include <iomanip> // setiosflags, setprecision
+#include <set> // set
+#include <utility> // pair
 
 // cv::
 #include <opencv2/core/core.hpp> // Mat
 #include <opencv2/highgui/highgui.hpp> // VideoCapture
 
+static void initProperties();
 static void printProperties(cv::VideoCapture& cap);
 
 int main(int argc, char *argv[]) {
@@ -20,6 +23,8 @@ int main(int argc, char *argv[]) {
 	const char KEY_ESC = (char)27;
 	double frameWidth = 640.0;
 	double frameHeight = 480.0;
+
+	initProperties();
 
 	// Format `double` output
 	std::cout << std::setiosflags(std::ios::fixed) << std::setprecision(3);
@@ -59,12 +64,29 @@ int main(int argc, char *argv[]) {
 	return 0;
 }
 
+// http://en.cppreference.com/w/cpp/language/enum
+typedef int PropertyBase;
+
+// <index, description>
+typedef std::pair<const PropertyBase, const char * const> Property;
+typedef std::set<Property> Properties;
+
+static Properties properties;
+
+static void initProperties() {
+	properties.insert(Property(CV_CAP_PROP_FRAME_WIDTH, "Frame width"));
+	properties.insert(Property(CV_CAP_PROP_FRAME_HEIGHT, "Frame height"));
+	properties.insert(Property(CV_CAP_PROP_FPS, "FPS"));
+	properties.insert(Property(CV_CAP_PROP_MODE, "Mode"));
+	properties.insert(Property(CV_CAP_PROP_FORMAT, "Format"));
+}
+
 // Prints some properties of `cap` into `std::cout`
 // http://docs.opencv.org/modules/highgui/doc/reading_and_writing_images_and_video.html#videocapture-get
 static void printProperties(cv::VideoCapture& cap) {
-	std::cout << "Frame width: " << cap.get(CV_CAP_PROP_FRAME_WIDTH) << std::endl;
-	std::cout << "Frame height: " << cap.get(CV_CAP_PROP_FRAME_HEIGHT) << std::endl;
-	std::cout << "FPS: " << cap.get(CV_CAP_PROP_FPS) << std::endl;
-	std::cout << "Mode: " << cap.get(CV_CAP_PROP_MODE) << std::endl;
-	std::cout << "Format: " << cap.get(CV_CAP_PROP_FORMAT) << std::endl;
+	for (Properties::iterator it=properties.begin(); it!=properties.end(); ++it) {
+		const PropertyBase& index = it->first;
+		const char * const& description = it->second;
+		std::cout << description << ": " << cap.get(index) << std::endl;
+	}
 }
