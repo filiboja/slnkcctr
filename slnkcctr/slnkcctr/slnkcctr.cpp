@@ -3,7 +3,7 @@
 
 #include "stdafx.h"
 
-#include <iostream> // cout
+#include <iostream> // cout, endl
 #include <iomanip> // setiosflags, setprecision
 
 #include <opencv2/core/core.hpp> // Mat
