@@ -11,5 +11,5 @@
 
 class DetectorColor {
 public:
-	FrameAnnotation detect(const cv::Mat& mat);
+	FrameAnnotation detect(const cv::Mat& mat) const;
 };
