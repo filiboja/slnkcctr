@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-#include "CaptureProperties.h"
+#include "CaptureProperties.hpp"
 
 CaptureProperties::CaptureProperties(std::ostream& os)
 : os(os) {

@@ -11,7 +11,7 @@
 #include <opencv2/core/core.hpp> // Mat
 #include <opencv2/highgui/highgui.hpp> // VideoCapture
 
-#include "CaptureProperties.h" // CaptureProperties
+#include "CaptureProperties.hpp" // CaptureProperties
 
 int main(int argc, char *argv[]) {
 	// Configuration
