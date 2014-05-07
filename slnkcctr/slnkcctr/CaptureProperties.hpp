@@ -1,5 +1,7 @@
 // Prints `VideoCapture` properties
 
+#pragma once
+
 #include "stdafx.h"
 
 // std::
