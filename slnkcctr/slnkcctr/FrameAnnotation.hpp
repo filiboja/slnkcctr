@@ -3,7 +3,7 @@
 #include "stdafx.h"
 
 // std::
-#include <ostream> // ostream
+#include <ostream> // ostream, endl
 
 // cv::
 #include <opencv2/core/core.hpp> // Point2i
@@ -18,6 +18,9 @@ public:
 };
 
 inline std::ostream& operator<<(std::ostream& os, const FrameAnnotation& obj) {
-	// TODO: Print obj into os here.
+	os << "slinky0: " << obj.slinky0 << std::endl;
+	os << "slinky1: " << obj.slinky1 << std::endl;
+	os << "handLeft: " << obj.handLeft << std::endl;
+	os << "handRight: " << obj.handRight << std::endl;
 	return os;
 }
