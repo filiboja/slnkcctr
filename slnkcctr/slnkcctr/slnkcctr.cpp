@@ -12,6 +12,7 @@
 #include <opencv2/highgui/highgui.hpp> // VideoCapture
 
 #include "CaptureProperties.hpp" // CaptureProperties
+#include "DetectorColor.hpp" // DetectorColor
 
 int main(int argc, char *argv[]) {
 	// Configuration
@@ -46,6 +47,8 @@ int main(int argc, char *argv[]) {
 	// Open window
 	cv::namedWindow(WIN_MAIN, CV_WINDOW_AUTOSIZE);
 
+	DetectorColor detector;
+
 	char c = 0;
 	// Main loop
 	while (c != KEY_ESC) {
@@ -55,6 +58,8 @@ int main(int argc, char *argv[]) {
 			std::cout << "Empty frame." << std::endl;
 		}
 		cv::imshow(WIN_MAIN, frame);
+		FrameAnnotation annotation = detector.detect(frame);
+		std::cout << annotation << std::endl;
 		c = (char)cvWaitKey(delay);
 	}
 
