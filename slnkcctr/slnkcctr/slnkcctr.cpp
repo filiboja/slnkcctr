@@ -21,8 +21,6 @@ int main(int argc, char *argv[]) {
 	double frameWidth = 640.0;
 	double frameHeight = 480.0;
 
-	CaptureProperties capProps;
-
 	// Format `double` output
 	std::cout << std::setiosflags(std::ios::fixed) << std::setprecision(3);
 
@@ -35,6 +33,8 @@ int main(int argc, char *argv[]) {
 		std::cout << "Could not open video stream." << std::endl;
 		return 1;
 	}
+
+	CaptureProperties capProps;
 
 	// Set
 	std::cout << "Set frame width: " << video.set(CV_CAP_PROP_FRAME_WIDTH, frameWidth) << std::endl;
