@@ -11,5 +11,8 @@
 
 class DetectorColor {
 public:
+	DetectorColor(const char * const window);
 	FrameAnnotation detect(const cv::Mat& mat) const;
+private:
+	const char * const window;
 };

@@ -18,6 +18,7 @@ int main(int argc, char *argv[]) {
 	// Configuration
 	const int delay = 10;
 	const char * const WIN_MAIN = "slnkcctr";
+	const char * const WIN_DETECTOR = "Detector";
 	const char KEY_ESC = (char)27;
 	double frameWidth = 640.0;
 	double frameHeight = 480.0;
@@ -47,7 +48,7 @@ int main(int argc, char *argv[]) {
 	// Open window
 	cv::namedWindow(WIN_MAIN, CV_WINDOW_AUTOSIZE);
 
-	DetectorColor detector;
+	DetectorColor detector(WIN_DETECTOR);
 
 	char c = 0;
 	// Main loop
@@ -59,6 +60,7 @@ int main(int argc, char *argv[]) {
 		}
 		FrameAnnotation annotation = detector.detect(frame);
 		std::cout << annotation << std::endl;
+		annotation.draw(frame);
 		cv::imshow(WIN_MAIN, frame);
 		c = (char)cvWaitKey(delay);
 	}
