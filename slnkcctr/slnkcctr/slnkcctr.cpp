@@ -17,7 +17,7 @@
 int main(int argc, char *argv[]) {
 	// Configuration
 	const int delay = 10;
-	const char* WIN_MAIN = "slnkcctr";
+	const char * const WIN_MAIN = "slnkcctr";
 	const char KEY_ESC = (char)27;
 	double frameWidth = 640.0;
 	double frameHeight = 480.0;
