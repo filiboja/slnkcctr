@@ -57,9 +57,9 @@ int main(int argc, char *argv[]) {
 		if (frame.empty()) {
 			std::cout << "Empty frame." << std::endl;
 		}
-		cv::imshow(WIN_MAIN, frame);
 		FrameAnnotation annotation = detector.detect(frame);
 		std::cout << annotation << std::endl;
+		cv::imshow(WIN_MAIN, frame);
 		c = (char)cvWaitKey(delay);
 	}
 
