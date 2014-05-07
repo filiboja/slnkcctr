@@ -9,7 +9,7 @@
 
 // cv::
 #include <opencv2/core/core.hpp> // Mat
-#include <opencv2/highgui/highgui.hpp> // VideoCapture
+#include <opencv2/highgui/highgui.hpp> // VideoCapture, namedWindow, imshow
 
 #include "CaptureProperties.hpp" // CaptureProperties
 #include "DetectorColor.hpp" // DetectorColor
