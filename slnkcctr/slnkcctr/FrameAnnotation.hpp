@@ -4,23 +4,18 @@
 
 // std::
 #include <ostream> // ostream, endl
+#include <set> // set
 
-// cv::
-#include <opencv2/core/core.hpp> // Point2i
+#include "FrameObject.h" // FrameObject
 
-struct FrameAnnotation {
+class FrameAnnotation {
 public:
-	typedef cv::Point2i Pos;
-	Pos slinky0;
-	Pos slinky1;
-	Pos handLeft;
-	Pos handRight;
+	void insert(const FrameObject& object);
+	void draw(cv::Mat& img) const;
+	std::ostream& print(std::ostream& os) const; // block
+private:
+	typedef std::set<FrameObject> Objects;
+	Objects objects;
 };
 
-inline std::ostream& operator<<(std::ostream& os, const FrameAnnotation& obj) {
-	os << "slinky0: " << obj.slinky0 << std::endl;
-	os << "slinky1: " << obj.slinky1 << std::endl;
-	os << "handLeft: " << obj.handLeft << std::endl;
-	os << "handRight: " << obj.handRight << std::endl;
-	return os;
-}
+std::ostream& operator<<(std::ostream& os, const FrameAnnotation& obj);

@@ -33,6 +33,9 @@
     <ClInclude Include="FrameAnnotation.hpp">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="FrameObject.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -45,6 +48,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DetectorColor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FrameAnnotation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FrameObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

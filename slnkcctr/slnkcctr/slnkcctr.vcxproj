@@ -80,12 +80,15 @@
     <ClInclude Include="CaptureProperties.hpp" />
     <ClInclude Include="DetectorColor.hpp" />
     <ClInclude Include="FrameAnnotation.hpp" />
+    <ClInclude Include="FrameObject.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CaptureProperties.cpp" />
     <ClCompile Include="DetectorColor.cpp" />
+    <ClCompile Include="FrameAnnotation.cpp" />
+    <ClCompile Include="FrameObject.cpp" />
     <ClCompile Include="slnkcctr.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
