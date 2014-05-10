@@ -95,8 +95,8 @@ int main(int argc, char *argv[]) {
 	// Main loop
 	int key = 0;
 	assert(key != KEY_ESC);
+	cv::Mat frame;
 	while (key != KEY_ESC) {
-		cv::Mat frame;
 		cap >> frame;
 		if (frame.empty()) {
 			std::cout << "Empty frame." << std::endl;
