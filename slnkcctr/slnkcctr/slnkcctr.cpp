@@ -19,6 +19,7 @@ int main(int argc, char *argv[]) {
 	const char * const WIN_ORIGINAL = "slnkcctr";
 	const char * const WIN_DETECTOR = "Detector";
 	const int KEY_ESC = 27;
+	const int KEY_PAUSE = 32;
 	double frameWidth = 640.0;
 	double frameHeight = 480.0;
 	enum CapMode { CAP_MODE_DEVICE, CAP_MODE_FILE };
@@ -95,12 +96,18 @@ int main(int argc, char *argv[]) {
 	// Main loop
 	int key = 0;
 	assert(key != KEY_ESC);
+	bool pause = false;
 	cv::Mat frame;
 	while (key != KEY_ESC) {
-		cap >> frame;
-		if (frame.empty()) {
-			std::cout << "Empty frame." << std::endl;
-			break;
+		if (key == KEY_PAUSE) {
+			pause = !pause;
+		}
+		if (!pause) {
+			cap >> frame;
+			if (frame.empty()) {
+				std::cout << "Empty frame." << std::endl;
+				break;
+			}
 		}
 		FrameAnnotation annotation = detector.detect(frame);
 		if (showOriginal) {
