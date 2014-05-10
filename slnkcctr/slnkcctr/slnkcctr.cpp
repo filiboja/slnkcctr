@@ -18,7 +18,7 @@ int main(int argc, char *argv[]) {
 	// Configuration
 	const char * const WIN_ORIGINAL = "slnkcctr";
 	const char * const WIN_DETECTOR = "Detector";
-	const char KEY_ESC = (char)27;
+	const int KEY_ESC = 27;
 	double frameWidth = 640.0;
 	double frameHeight = 480.0;
 	enum CapMode { CAP_MODE_DEVICE, CAP_MODE_FILE };
