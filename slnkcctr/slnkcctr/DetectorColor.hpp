@@ -15,4 +15,10 @@ public:
 	FrameAnnotation detect(const cv::Mat& mat) const;
 private:
 	const char * const window;
+	int iLowH;
+	int iHighH;
+	int iLowS; 
+	int iHighS;
+	int iLowV;
+	int iHighV;
 };

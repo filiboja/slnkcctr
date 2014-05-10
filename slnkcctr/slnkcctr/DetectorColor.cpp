@@ -14,8 +14,16 @@ static const char * const ID_HAND_RIGHT = "handRight";
 static const int RADIUS = 1;
 
 DetectorColor::DetectorColor(const char * const window)
-: window(window) {
+: window(window), iLowH(0), iHighH(179), iLowS(0), iHighS(255), iLowV(0), iHighV(255) {
 	cv::namedWindow(window, CV_WINDOW_AUTOSIZE);
+
+	cv::namedWindow("Control", CV_WINDOW_AUTOSIZE);
+	cvCreateTrackbar("LowH", "Control", &iLowH, 179); //Hue (0 - 179)
+	cvCreateTrackbar("HighH", "Control", &iHighH, 179);
+	cvCreateTrackbar("LowS", "Control", &iLowS, 255); //Saturation (0 - 255)
+	cvCreateTrackbar("HighS", "Control", &iHighS, 255);
+	cvCreateTrackbar("LowV", "Control", &iLowV, 255); //Value (0 - 255)
+	cvCreateTrackbar("HighV", "Control", &iHighV, 255);
 }
 
 FrameAnnotation
@@ -28,9 +36,12 @@ DetectorColor::detect(const cv::Mat& img) const {
 	annotation.insert(FrameObject(ID_SLINKY_1, pos, RADIUS, color));
 
 	cv::Mat imgHsv;
-	cvtColor(img, imgHsv, cv::COLOR_BGR2HSV);
+	cv::cvtColor(img, imgHsv, cv::COLOR_BGR2HSV);
 
-	cv::imshow(window, imgHsv);
+	cv::Mat imgThresholded;
+	cv::inRange(imgHsv, cv::Scalar(iLowH, iLowS, iLowV), cv::Scalar(iHighH, iHighS, iHighV), imgThresholded);
+
+	cv::imshow(window, imgThresholded);
 
 	return annotation;
 }
