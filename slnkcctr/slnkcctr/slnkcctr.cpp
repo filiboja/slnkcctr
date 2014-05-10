@@ -71,7 +71,7 @@ int main(int argc, char *argv[]) {
 		cv::namedWindow(WIN_ORIGINAL, CV_WINDOW_AUTOSIZE);
 	}
 
-	int fps = cap.get(CV_CAP_PROP_FPS);
+	int fps = (int)cap.get(CV_CAP_PROP_FPS);
 	if (fps <= 0) {
 		fps = defaultFps;
 	}
