@@ -111,8 +111,10 @@ int main(int argc, char *argv[]) {
 		}
 		FrameAnnotation annotation = detector.detect(frame);
 		if (showOriginal) {
-			annotation.draw(frame);
-			cv::imshow(WIN_ORIGINAL, frame);
+			cv::Mat annotationImg = cv::Mat::zeros(frame.size(), CV_8UC3);
+			annotation.draw(annotationImg);
+			cv::Mat frameAnnotated = frame + annotationImg;
+			cv::imshow(WIN_ORIGINAL, frameAnnotated);
 		}
 		if (output && outputVideo.isOpened()) {
 			outputVideo << frame;
