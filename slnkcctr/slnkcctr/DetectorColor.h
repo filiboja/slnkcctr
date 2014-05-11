@@ -30,7 +30,6 @@ public:
 	friend bool operator<(const DetectorColor& left, const DetectorColor& right);
 private:
 	cv::Mat threshold(const cv::Mat& imgHsv) const;
-	void border(cv::Mat& img) const;
 
 	const std::string id;
 

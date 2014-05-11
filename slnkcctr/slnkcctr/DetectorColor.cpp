@@ -2,12 +2,18 @@
 
 #include "DetectorColor.h"
 
+// std::
+#include <iostream> // cout, endl
+
 // cv::
 #include <opencv2/core/core.hpp> // Mat, inRange
 #include <opencv2/highgui/highgui.hpp>
 // namedWindow, CV_WINDOW_NORMAL, imshow, resizeWindow, destroyWindow, createTrackbar
 #include <opencv2/imgproc/imgproc.hpp> // Moments, moments
 
+static void border(cv::Mat& img,
+	const double& borderLeft = 0.0, const double& borderRight = 0.0,
+	const double& borderTop = 0.0, const double& borderBottom = 0.0);
 static void open(cv::Mat& img, const int& size);
 static void close(cv::Mat& img, const int& size);
 
@@ -63,7 +69,7 @@ DetectorColor::detect(const cv::Mat& imgHsv, const cv::Mat& imgBgr) const {
 
 	cv::Mat imgThresholded = threshold(imgHsv);
 
-	border(imgThresholded);
+	border(imgThresholded, 0.25, 0.25, 0.0, 0.0);
 	
 	open(imgThresholded, 5);
 	close(imgThresholded, 5);
@@ -90,11 +96,28 @@ DetectorColor::threshold(const cv::Mat& imgHsv) const {
 	return imgThresholded;
 }
 
-void
-DetectorColor::border(cv::Mat& img) const {
-	const int borderRight = 256;
-	const int cols = img.cols;
-	img.colRange(cols - borderRight, cols) = cv::Scalar::all(0);
+static void border(cv::Mat& img,
+	const double& borderLeft, const double& borderRight,
+	const double& borderTop, const double& borderBottom)
+{
+	static const cv::Scalar_<uchar>& zeros = cv::Scalar_<uchar>::all(0);
+
+	if (borderLeft > 0.0) {
+		const int leftcol = int(borderLeft * img.cols);
+		img.colRange(0, leftcol) = zeros;
+	}
+	if (borderRight > 0.0) {
+		const int rightcol = int((1 - borderRight) * img.cols);
+		img.colRange(rightcol, img.cols) = zeros;
+	}
+	if (borderTop > 0.0) {
+		const int toprow = int(borderTop * img.rows);
+		img.rowRange(0, toprow) = zeros;
+	}
+	if (borderBottom > 0.0) {
+		const int bottomrow = int((1 - borderBottom) * img.rows);
+		img.rowRange(bottomrow, img.rows) = zeros;
+	}
 }
 
 static void open(cv::Mat& img, const int& size) {
