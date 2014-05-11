@@ -10,6 +10,11 @@ DetectorSlinky::DetectorSlinky() : detector("detector", 84, 104, 44, 92, 154, 25
 	detector.enableWinLimits("limits");
 }
 
+DetectorSlinky::DetectorSlinky(const cv::Size& imgSize) : detector("detector", 84, 104, 44, 92, 154, 255) {
+	detector.enableWinVideo("video", imgSize.width, imgSize.height);
+	detector.enableWinLimits("limits");
+}
+
 FrameAnnotation
 DetectorSlinky::detect(const cv::Mat& img) const {
 	// Convert `img` to HSV color space
