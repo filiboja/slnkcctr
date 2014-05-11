@@ -15,9 +15,9 @@ static const int RADIUS = 1;
 
 DetectorColor::DetectorColor(const char * const window)
 : window(window), iLowH(0), iHighH(179), iLowS(0), iHighS(255), iLowV(0), iHighV(255) {
-	cv::namedWindow(window, CV_WINDOW_AUTOSIZE);
+	cv::namedWindow(window, cv::WINDOW_AUTOSIZE);
 
-	cv::namedWindow("Control", CV_WINDOW_AUTOSIZE);
+	cv::namedWindow("Control", cv::WINDOW_AUTOSIZE);
 	cvCreateTrackbar("LowH", "Control", &iLowH, 179); //Hue (0 - 179)
 	cvCreateTrackbar("HighH", "Control", &iHighH, 179);
 	cvCreateTrackbar("LowS", "Control", &iLowS, 255); //Saturation (0 - 255)

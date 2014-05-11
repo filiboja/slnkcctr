@@ -73,7 +73,7 @@ int main(int argc, char *argv[]) {
 	
 	// Open window
 	if (showOriginal) {
-		cv::namedWindow(WIN_ORIGINAL, CV_WINDOW_AUTOSIZE);
+		cv::namedWindow(WIN_ORIGINAL, cv::WINDOW_AUTOSIZE);
 	}
 
 	int fps = (int)cap.get(CV_CAP_PROP_FPS);
