@@ -134,6 +134,7 @@ int main(int argc, char *argv[]) {
 			delayCur = 1;
 		}
 		clockBegin = clockEnd;
+		assert(delayCur > 0); // Don't wait forever
 		key = cv::waitKey(delayCur);
 	}
 
