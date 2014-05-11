@@ -83,7 +83,7 @@ DetectorColor::detect(const cv::Mat& imgHsv, const cv::Mat& imgBgr) const {
 
 	if (videoWinUse) {
 		cv::Mat imgMasked;
-		imgBgr.copyTo(imgMasked, imgThresholded);
+		imgBgr.copyTo(imgMasked, imgThresholded); // apply mask `imgThresholded` to `imgBgr`
 		cv::imshow(videoWinName, imgMasked);
 	}
 
