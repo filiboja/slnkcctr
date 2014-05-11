@@ -19,7 +19,7 @@ DetectorSlinky::detect(const cv::Mat& img) const {
 	FrameAnnotation annotation;
 	DetectorColor::Pos pos = detector.detect(imgHsv, img); // Detect object
 	const char * const id = "DetectColor";
-	const int radius = 1;
+	const int radius = 64;
 	const FrameObject::Color color(255, 0, 0); // blue
 	FrameObject frameObject(id, pos, radius, color);
 	annotation.insert(frameObject);
