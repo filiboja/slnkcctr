@@ -100,7 +100,7 @@ int main(int argc, char *argv[]) {
 		}
 	}
 
-	DetectorSlinky detector;
+	DetectorSlinky detector(frameSize);
 
 	// Main loop
 	int key = 0;
