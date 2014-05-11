@@ -74,6 +74,7 @@ int main(int argc, char *argv[]) {
 
 	int fps = (int)cap.get(CV_CAP_PROP_FPS);
 	if (fps <= 0) {
+		std::cout << "Failed to get FPS from capture; using default: " << defaultFps << std::endl;
 		fps = defaultFps;
 	}
 	int delay = 1000 / fps;
