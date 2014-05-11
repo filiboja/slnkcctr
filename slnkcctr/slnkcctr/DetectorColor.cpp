@@ -79,8 +79,6 @@ DetectorColor::detect(const cv::Mat& imgHsv, const cv::Mat& imgBgr) const {
 	int x = (int)(oMoments.m10 / oMoments.m00);
 	int y = (int)(oMoments.m01 / oMoments.m00);
 	
-	// TODO: Calculate result `Pos`.
-
 	if (videoWinUse) {
 		cv::Mat imgMasked;
 		imgBgr.copyTo(imgMasked, imgThresholded); // apply mask `imgThresholded` to `imgBgr`
