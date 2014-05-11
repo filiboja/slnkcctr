@@ -6,6 +6,7 @@
 #include <opencv2/core/core.hpp> // Mat, inRange
 #include <opencv2/highgui/highgui.hpp>
 // namedWindow, CV_WINDOW_NORMAL, imshow, resizeWindow, destroyWindow, createTrackbar
+#include <opencv2/imgproc/imgproc.hpp> // Moments, moments
 
 DetectorColor::DetectorColor(const std::string& id,
 	const Limit& hueMin, const Limit& hueMax,
@@ -60,6 +61,23 @@ DetectorColor::detect(const cv::Mat& imgHsv, const cv::Mat& imgBgr) const {
 	const cv::Vec3b upperb = cv::Vec3b(iHighH, iHighS, iHighV);
 	cv::Mat imgThresholded;
 	cv::inRange(imgHsv, lowerb, upperb, imgThresholded);
+
+	const int borderRight = 256;
+	const int cols = imgThresholded.cols;
+	imgThresholded.colRange(cols - borderRight, cols) = cv::Scalar::all(0);
+	
+	//morphological opening (removes small objects from the foreground)
+	cv::erode(imgThresholded, imgThresholded, cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(5, 5)));
+	cv::dilate(imgThresholded, imgThresholded, cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(5, 5)));
+
+	//morphological closing (removes small holes from the foreground)
+	cv::dilate(imgThresholded, imgThresholded, cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(5, 5)));
+	cv::erode(imgThresholded, imgThresholded, cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(5, 5)));
+
+
+	cv::Moments oMoments = cv::moments(imgThresholded);
+	int x = (int)(oMoments.m10 / oMoments.m00);
+	int y = (int)(oMoments.m01 / oMoments.m00);
 	
 	// TODO: Calculate result `Pos`.
 
@@ -69,7 +87,7 @@ DetectorColor::detect(const cv::Mat& imgHsv, const cv::Mat& imgBgr) const {
 		cv::imshow(videoWinName, imgMasked);
 	}
 
-	return Pos(0, 0);
+	return Pos(x, y);
 }
 
 bool
