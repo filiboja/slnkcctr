@@ -130,7 +130,7 @@ int main(int argc, char *argv[]) {
 		int msecDiff = clockDiff * 1000 / CLOCKS_PER_SEC;
 		int delayCur = delay - msecDiff;
 		if (delayCur <= 0) {
-			std::cout << "Long frame: " << msecDiff << std::endl;
+			std::cout << "Long frame: " << msecDiff << " > " << delay << std::endl;
 			delayCur = 1;
 		}
 		clockBegin = clockEnd;
