@@ -8,6 +8,9 @@
 // namedWindow, CV_WINDOW_NORMAL, imshow, resizeWindow, destroyWindow, createTrackbar
 #include <opencv2/imgproc/imgproc.hpp> // Moments, moments
 
+static void open(cv::Mat& img, const int& size);
+static void close(cv::Mat& img, const int& size);
+
 DetectorColor::DetectorColor(const std::string& id,
 	const Limit& hueMin, const Limit& hueMax,
 	const Limit& satMin, const Limit& satMax,
@@ -57,23 +60,13 @@ DetectorColor::Pos
 DetectorColor::detect(const cv::Mat& imgHsv, const cv::Mat& imgBgr) const {
 	assert(imgHsv.channels() == 3);
 	assert(imgHsv.size() == imgBgr.size());
-	const cv::Vec3b lowerb = cv::Vec3b(iLowH, iLowS, iLowV);
-	const cv::Vec3b upperb = cv::Vec3b(iHighH, iHighS, iHighV);
-	cv::Mat imgThresholded;
-	cv::inRange(imgHsv, lowerb, upperb, imgThresholded);
 
-	const int borderRight = 256;
-	const int cols = imgThresholded.cols;
-	imgThresholded.colRange(cols - borderRight, cols) = cv::Scalar::all(0);
+	cv::Mat imgThresholded = threshold(imgHsv);
+
+	border(imgThresholded);
 	
-	//morphological opening (removes small objects from the foreground)
-	cv::erode(imgThresholded, imgThresholded, cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(5, 5)));
-	cv::dilate(imgThresholded, imgThresholded, cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(5, 5)));
-
-	//morphological closing (removes small holes from the foreground)
-	cv::dilate(imgThresholded, imgThresholded, cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(5, 5)));
-	cv::erode(imgThresholded, imgThresholded, cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(5, 5)));
-
+	open(imgThresholded, 5);
+	close(imgThresholded, 5);
 
 	cv::Moments oMoments = cv::moments(imgThresholded);
 	int x = (int)(oMoments.m10 / oMoments.m00);
@@ -86,6 +79,34 @@ DetectorColor::detect(const cv::Mat& imgHsv, const cv::Mat& imgBgr) const {
 	}
 
 	return Pos(x, y);
+}
+
+cv::Mat
+DetectorColor::threshold(const cv::Mat& imgHsv) const {
+	const cv::Vec3b lowerb = cv::Vec3b(iLowH, iLowS, iLowV);
+	const cv::Vec3b upperb = cv::Vec3b(iHighH, iHighS, iHighV);
+	cv::Mat imgThresholded;
+	cv::inRange(imgHsv, lowerb, upperb, imgThresholded);
+	return imgThresholded;
+}
+
+void
+DetectorColor::border(cv::Mat& img) const {
+	const int borderRight = 256;
+	const int cols = img.cols;
+	img.colRange(cols - borderRight, cols) = cv::Scalar::all(0);
+}
+
+static void open(cv::Mat& img, const int& size) {
+	//morphological opening (removes small objects from the foreground)
+	cv::erode(img, img, cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(size, size)));
+	cv::dilate(img, img, cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(size, size)));
+}
+
+static void close(cv::Mat& img, const int& size) {
+	//morphological closing (removes small holes from the foreground)
+	cv::dilate(img, img, cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(size, size)));
+	cv::erode(img, img, cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(size, size)));
 }
 
 bool
