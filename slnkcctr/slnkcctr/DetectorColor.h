@@ -26,6 +26,8 @@ public:
 
 	// @param imgHsv image in HSV color space
 	Pos detect(const cv::Mat& imgHsv, const cv::Mat& imgBgr) const;
+
+	friend bool operator<(const DetectorColor& left, const DetectorColor& right);
 private:
 	const std::string id;
 

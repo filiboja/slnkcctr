@@ -71,3 +71,8 @@ DetectorColor::detect(const cv::Mat& imgHsv, const cv::Mat& imgBgr) const {
 
 	return Pos(0, 0);
 }
+
+bool
+operator<(const DetectorColor& left, const DetectorColor& right) {
+	return left.id < right.id;
+}
