@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-#include "DetectorColor.hpp"
+#include "DetectorColor.h"
 
 // cv::
 #include <opencv2/highgui/highgui.hpp> // namedWindow, CV_WINDOW_AUTOSIZE, imshow

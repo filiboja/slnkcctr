@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-#include "FrameAnnotation.hpp"
+#include "FrameAnnotation.h"
 
 void
 FrameAnnotation::insert(const FrameObject& object) {

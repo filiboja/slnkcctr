@@ -7,7 +7,7 @@
 // cv::
 #include <opencv2/core/core.hpp> // Mat
 
-#include "FrameAnnotation.hpp" // FrameAnnotation
+#include "FrameAnnotation.h" // FrameAnnotation
 
 class DetectorColor {
 public:

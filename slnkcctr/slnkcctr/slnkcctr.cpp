@@ -14,8 +14,8 @@
 #include <opencv2/core/core.hpp> // Mat
 #include <opencv2/highgui/highgui.hpp> // VideoCapture, namedWindow, imshow
 
-#include "CaptureProperties.hpp" // CaptureProperties
-#include "DetectorColor.hpp" // DetectorColor
+#include "CaptureProperties.h" // CaptureProperties
+#include "DetectorColor.h" // DetectorColor
 
 int main(int argc, char *argv[]) {
 	// Configuration
