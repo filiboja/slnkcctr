@@ -7,10 +7,11 @@
 #include <opencv2/highgui/highgui.hpp>
 // namedWindow, CV_WINDOW_NORMAL, imshow, resizeWindow, destroyWindow, createTrackbar
 
-DetectorColor::DetectorColor(const Limit& hueMin, const Limit& hueMax,
+DetectorColor::DetectorColor(const std::string& id,
+	const Limit& hueMin, const Limit& hueMax,
 	const Limit& satMin, const Limit& satMax,
 	const Limit& valMin, const Limit& valMax)
-	: iLowH(hueMin), iHighH(hueMax), iLowS(satMin), iHighS(satMax), iLowV(valMin), iHighV(valMax),
+	: id(id), iLowH(hueMin), iHighH(hueMax), iLowS(satMin), iHighS(satMax), iLowV(valMin), iHighV(valMax),
 	videoWinUse(false), limitsWinUse(false)
 {}
 

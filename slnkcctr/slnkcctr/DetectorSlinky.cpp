@@ -5,7 +5,7 @@
 // cv::
 #include <opencv2/imgproc/imgproc.hpp> // cvtColor, COLOR_BGR2HSV
 
-DetectorSlinky::DetectorSlinky() {
+DetectorSlinky::DetectorSlinky() : detector("detector") {
 	detector.enableWinVideo("video");
 	detector.enableWinLimits("limits");
 }

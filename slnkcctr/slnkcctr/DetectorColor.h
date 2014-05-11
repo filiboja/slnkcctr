@@ -15,7 +15,8 @@ public:
 	typedef int Limit;
 	typedef cv::Point2i Pos;
 
-	DetectorColor(const Limit& hueMin = HUE_MIN, const Limit& hueMax = HUE_MAX,
+	DetectorColor(const std::string& id,
+		const Limit& hueMin = HUE_MIN, const Limit& hueMax = HUE_MAX,
 		const Limit& satMin = SAT_MIN, const Limit& satMax = SAT_MAX,
 		const Limit& valMin = VAL_MIN, const Limit& valMax = VAL_MAX);
 	~DetectorColor();
@@ -26,6 +27,8 @@ public:
 	// @param imgHsv image in HSV color space
 	Pos detect(const cv::Mat& imgHsv, const cv::Mat& imgBgr) const;
 private:
+	const std::string id;
+
 	Limit iLowH;
 	Limit iHighH;
 	Limit iLowS; 
