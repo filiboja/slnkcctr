@@ -2,6 +2,9 @@
 
 #include "stdafx.h"
 
+// std::
+#include <string> // string
+
 // cv::
 #include <opencv2/core/core.hpp> // Point2i, Mat, circle
 
@@ -10,14 +13,14 @@ public:
 	typedef cv::Point2i Pos;
 	typedef cv::Scalar Color;
 
-	FrameObject(const char * const& id, const Pos pos, const int radius, const Color color);
+	FrameObject(const std::string& id, const Pos pos, const int radius, const Color color);
 
 	void draw(cv::Mat& img) const;
 	std::ostream& print(std::ostream& os) const; // inline
 
 	friend bool operator<(const FrameObject& left, const FrameObject& right);
 private:
-	const char * const id; // slinky0, slinky1, handLeft, handRight
+	const std::string id; // slinky0, slinky1, handLeft, handRight
 	const Pos pos;
 	const int radius;
 	const Color color;

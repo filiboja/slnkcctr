@@ -5,7 +5,7 @@
 #include <cassert> // assert
 #include <cstring> // strcmp
 
-FrameObject::FrameObject(const char * const& id, const Pos pos, const int radius, const Color color)
+FrameObject::FrameObject(const std::string& id, const Pos pos, const int radius, const Color color)
 	: id(id), pos(pos), radius(radius), color(color)
 {}
 
@@ -27,9 +27,8 @@ operator<<(std::ostream& os, const FrameObject& obj) {
 bool
 operator<(const FrameObject& left, const FrameObject& right) {
 	// id
-	int idDiff = strcmp(left.id, right.id);
-	if (idDiff != 0) {
-		return idDiff < 0;
+	if (left.id != right.id) {
+		return left.id < right.id;
 	}
 
 	// pos
