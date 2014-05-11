@@ -13,6 +13,7 @@
 // cv::
 #include <opencv2/core/core.hpp> // Mat
 #include <opencv2/highgui/highgui.hpp> // VideoCapture, namedWindow, imshow
+#include <opencv2/imgproc/imgproc.hpp> // resize
 
 #include "CaptureProperties.h" // CaptureProperties
 #include "DetectorSlinky.h" // DetectorColor
@@ -34,6 +35,7 @@ int main(int argc, char *argv[]) {
 	const int defaultFps = 15; // in case FPS is not provided by `cap`
 	const bool showOriginal = true;
 	const bool reportLongFrames = false;
+	const cv::Size frameSize = cv::Size(320, 240);
 
 	// Format `double` output
 	std::cout << std::setiosflags(std::ios::fixed) << std::setprecision(3);
@@ -118,6 +120,7 @@ int main(int argc, char *argv[]) {
 				std::cout << "Empty frame." << std::endl;
 				break;
 			}
+			cv::resize(frame, frame, frameSize, 0.0, 0.0, cv::INTER_AREA);
 		}
 		FrameAnnotation annotation = detector.detect(frame);
 		if (showOriginal) {
