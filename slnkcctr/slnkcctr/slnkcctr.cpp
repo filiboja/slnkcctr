@@ -77,7 +77,7 @@ int main(int argc, char *argv[]) {
 		std::cout << "Failed to get FPS from capture; using default: " << defaultFps << std::endl;
 		fps = defaultFps;
 	}
-	int delay = 1000 / fps;
+	int delay = 1000 / fps; // in milliseconds
 	std::cout << "Desired FPS: " << fps << std::endl;
 	std::cout << "Frame delay: " << delay << std::endl;
 	std::cout << "Actual FPS: " << 1000.0 / delay << std::endl;
