@@ -52,4 +52,5 @@ private:
 	static const Limit VAL_MAX = 255;
 };
 
+// Only considers `id`
 bool operator<(const DetectorColor& left, const DetectorColor& right);
