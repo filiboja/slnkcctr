@@ -76,9 +76,7 @@ int main(int argc, char *argv[]) {
 	// Open window
 	if (showOriginal) {
 		cv::namedWindow(WIN_ORIGINAL, cv::WINDOW_NORMAL);
-		int width = 640;
-		int height = 480;
-		cv::resizeWindow(WIN_ORIGINAL, width, height);
+		cv::resizeWindow(WIN_ORIGINAL, frameSize.width, frameSize.height);
 	}
 
 	int fps = (int)cap.get(CV_CAP_PROP_FPS);
