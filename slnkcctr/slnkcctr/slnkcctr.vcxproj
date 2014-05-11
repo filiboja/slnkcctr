@@ -113,6 +113,7 @@
   <ItemGroup>
     <ClInclude Include="CaptureProperties.h" />
     <ClInclude Include="DetectorColor.h" />
+    <ClInclude Include="DetectorSlinky.h" />
     <ClInclude Include="FrameAnnotation.h" />
     <ClInclude Include="FrameObject.h" />
     <ClInclude Include="stdafx.h" />
@@ -128,6 +129,7 @@
     </ClCompile>
     <ClCompile Include="CaptureProperties.cpp" />
     <ClCompile Include="DetectorColor.cpp" />
+    <ClCompile Include="DetectorSlinky.cpp" />
     <ClCompile Include="FrameAnnotation.cpp" />
     <ClCompile Include="FrameObject.cpp" />
     <ClCompile Include="slnkcctr.cpp" />

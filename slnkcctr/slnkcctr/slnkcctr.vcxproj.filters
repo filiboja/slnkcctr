@@ -39,6 +39,9 @@
     <ClInclude Include="CaptureProperties.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DetectorSlinky.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -61,6 +64,9 @@
     </ClCompile>
     <ClCompile Include="C:\Program Files\gevorkyan.org\MicroProfiler\micro-profiler.initializer.cpp">
       <Filter>Source Files\MicroProfiler</Filter>
+    </ClCompile>
+    <ClCompile Include="DetectorSlinky.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -15,7 +15,7 @@
 #include <opencv2/highgui/highgui.hpp> // VideoCapture, namedWindow, imshow
 
 #include "CaptureProperties.h" // CaptureProperties
-#include "DetectorColor.h" // DetectorColor
+#include "DetectorSlinky.h" // DetectorColor
 
 int main(int argc, char *argv[]) {
 	// Configuration
@@ -99,7 +99,7 @@ int main(int argc, char *argv[]) {
 		}
 	}
 
-	DetectorColor detector(WIN_DETECTOR);
+	DetectorSlinky detector;
 
 	// Main loop
 	int key = 0;

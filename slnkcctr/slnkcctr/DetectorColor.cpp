@@ -3,48 +3,70 @@
 #include "DetectorColor.h"
 
 // cv::
-#include <opencv2/highgui/highgui.hpp> // namedWindow, CV_WINDOW_AUTOSIZE, imshow
-#include <opencv2/imgproc/imgproc.hpp> // cvtColor, COLOR_BGR2HSV
+#include <opencv2/core/core.hpp> // Mat, inRange
+#include <opencv2/highgui/highgui.hpp>
+// namedWindow, CV_WINDOW_NORMAL, imshow, resizeWindow, destroyWindow, createTrackbar
 
-static const char * const ID_SLINKY_0 = "slinky0";
-static const char * const ID_SLINKY_1 = "slinky1";
-static const char * const ID_HAND_LEFT = "handLeft";
-static const char * const ID_HAND_RIGHT = "handRight";
+DetectorColor::DetectorColor(const Limit& hueMin, const Limit& hueMax,
+	const Limit& satMin, const Limit& satMax,
+	const Limit& valMin, const Limit& valMax)
+	: iLowH(hueMin), iHighH(hueMax), iLowS(satMin), iHighS(satMax), iLowV(valMin), iHighV(valMax),
+	videoWinUse(false), limitsWinUse(false)
+{}
 
-static const int RADIUS = 1;
-
-DetectorColor::DetectorColor(const char * const window)
-: window(window), iLowH(0), iHighH(179), iLowS(0), iHighS(255), iLowV(0), iHighV(255) {
-	cv::namedWindow(window, cv::WINDOW_NORMAL);
-	int width = 640;
-	int height = 480;
-	cv::resizeWindow(window, width, height);
-
-	cv::namedWindow("Control", cv::WINDOW_AUTOSIZE);
-	cvCreateTrackbar("LowH", "Control", &iLowH, 179); //Hue (0 - 179)
-	cvCreateTrackbar("HighH", "Control", &iHighH, 179);
-	cvCreateTrackbar("LowS", "Control", &iLowS, 255); //Saturation (0 - 255)
-	cvCreateTrackbar("HighS", "Control", &iHighS, 255);
-	cvCreateTrackbar("LowV", "Control", &iLowV, 255); //Value (0 - 255)
-	cvCreateTrackbar("HighV", "Control", &iHighV, 255);
+DetectorColor::~DetectorColor() {
+	if (videoWinUse) {
+		cv::destroyWindow(videoWinName);
+	}
+	if (limitsWinUse) {
+		cv::destroyWindow(limitsWinName);
+	}
 }
 
-FrameAnnotation
-DetectorColor::detect(const cv::Mat& img) const {
-	// TODO: Implement.
-	FrameAnnotation annotation;
-	FrameObject::Color color(0, 0, 255); // blue
-	FrameObject::Pos pos(10, 20);
-	annotation.insert(FrameObject(ID_SLINKY_0, pos, RADIUS, color));
-	annotation.insert(FrameObject(ID_SLINKY_1, pos, RADIUS, color));
+void
+DetectorColor::enableWinVideo(const std::string& winname, const int& width, const int& height) {
+	videoWinUse = true;
+	videoWinName = winname;
 
-	cv::Mat imgHsv;
-	cv::cvtColor(img, imgHsv, cv::COLOR_BGR2HSV);
+	// Create window
+	cv::namedWindow(videoWinName, cv::WINDOW_NORMAL);
+	cv::resizeWindow(videoWinName, width, height);
+}
 
+void
+DetectorColor::enableWinLimits(const std::string& winname) {
+	limitsWinUse = true;
+	limitsWinName = winname;
+
+	// Create window
+	cv::namedWindow(limitsWinName, cv::WINDOW_AUTOSIZE);
+
+	// Create trackbars
+	const char * const winnameChar = limitsWinName.c_str();
+	cv::createTrackbar("Hue min", winnameChar, &iLowH, HUE_MAX); //Hue (0 - 179)
+	cv::createTrackbar("Hue max", winnameChar, &iHighH, HUE_MAX);
+	cv::createTrackbar("Saturation min", winnameChar, &iLowS, SAT_MAX); //Saturation (0 - 255)
+	cv::createTrackbar("Saturation max", winnameChar, &iHighS, SAT_MAX);
+	cv::createTrackbar("Value min", winnameChar, &iLowV, VAL_MAX); //Value (0 - 255)
+	cv::createTrackbar("Value max", winnameChar, &iHighV, VAL_MAX);
+}
+
+DetectorColor::Pos
+DetectorColor::detect(const cv::Mat& imgHsv, const cv::Mat& imgBgr) const {
+	assert(imgHsv.channels() == 3);
+	assert(imgHsv.size() == imgBgr.size());
+	const cv::Vec3b lowerb = cv::Vec3b(iLowH, iLowS, iLowV);
+	const cv::Vec3b upperb = cv::Vec3b(iHighH, iHighS, iHighV);
 	cv::Mat imgThresholded;
-	cv::inRange(imgHsv, cv::Scalar(iLowH, iLowS, iLowV), cv::Scalar(iHighH, iHighS, iHighV), imgThresholded);
+	cv::inRange(imgHsv, lowerb, upperb, imgThresholded);
+	
+	// TODO: Calculate result `Pos`.
 
-	cv::imshow(window, imgThresholded);
+	if (videoWinUse) {
+		cv::Mat imgMasked;
+		imgBgr.copyTo(imgMasked, imgThresholded);
+		cv::imshow(videoWinName, imgMasked);
+	}
 
-	return annotation;
+	return Pos(0, 0);
 }
