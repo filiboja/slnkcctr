@@ -11,7 +11,7 @@ FrameObject::FrameObject(const char * const& id, const Pos pos, const int radius
 
 void
 FrameObject::draw(cv::Mat& img) const {
-	circle(img, pos, radius, color);
+	circle(img, pos, radius, color, 4);
 }
 
 std::ostream&
