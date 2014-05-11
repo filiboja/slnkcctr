@@ -33,6 +33,7 @@ int main(int argc, char *argv[]) {
 	const std::string outputFilename = "out.avi";
 	const int defaultFps = 15; // in case FPS is not provided by `cap`
 	const bool showOriginal = true;
+	const bool reportLongFrames = false;
 
 	// Format `double` output
 	std::cout << std::setiosflags(std::ios::fixed) << std::setprecision(3);
@@ -130,7 +131,9 @@ int main(int argc, char *argv[]) {
 		int msecDiff = clockDiff * 1000 / CLOCKS_PER_SEC;
 		int delayCur = delay - msecDiff;
 		if (delayCur <= 0) {
-			std::cout << "Long frame: " << msecDiff << " > " << delay << std::endl;
+			if (reportLongFrames) {
+				std::cout << "Long frame: " << msecDiff << " > " << delay << std::endl;
+			}
 			delayCur = 1;
 		}
 		clockBegin = clockEnd;
