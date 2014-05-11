@@ -2,6 +2,9 @@
 
 #include "stdafx.h"
 
+// c
+#include <ctime> // clock, CLOCKS_PER_SEC
+
 // std::
 #include <iostream> // cout, endl
 #include <iomanip> // setiosflags, setprecision
@@ -99,6 +102,7 @@ int main(int argc, char *argv[]) {
 	assert(key != KEY_ESC);
 	bool pause = false;
 	cv::Mat frame;
+	clock_t clockBegin = clock();
 	while (key != KEY_ESC) {
 		if (key == KEY_PAUSE) {
 			pause = !pause;
@@ -120,7 +124,17 @@ int main(int argc, char *argv[]) {
 		if (output && outputVideo.isOpened()) {
 			outputVideo << frame;
 		}
-		key = cv::waitKey(delay);
+		clock_t clockEnd = clock();
+		assert(clockEnd >= clockBegin);
+		clock_t clockDiff = clockEnd - clockBegin;
+		int msecDiff = clockDiff * 1000 / CLOCKS_PER_SEC;
+		int delayCur = delay - msecDiff;
+		if (delayCur <= 0) {
+			std::cout << "Long frame: " << msecDiff << std::endl;
+			delayCur = 1;
+		}
+		clockBegin = clockEnd;
+		key = cv::waitKey(delayCur);
 	}
 
 	return 0;
