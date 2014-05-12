@@ -15,6 +15,7 @@
 #include <opencv2/highgui/highgui.hpp> // VideoCapture, namedWindow, imshow
 #include <opencv2/imgproc/imgproc.hpp> // resize
 
+#include "CapMode.h" // CapMode
 #include "CaptureProperties.h" // CaptureProperties
 #include "DetectorSlinky.h" // DetectorColor
 
@@ -31,7 +32,6 @@ int main(int argc, char *argv[]) {
 	const int KEY_PAUSE = 32;
 	double frameWidth = 640.0;
 	double frameHeight = 480.0;
-	enum CapMode { CAP_MODE_DEVICE, CAP_MODE_FILE };
 	CapMode capMode = CAP_MODE_FILE;
 	const int capDevice = 0;
 	const std::string capFilename = "Slinky day.wmv";

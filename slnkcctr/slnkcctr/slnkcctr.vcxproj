@@ -114,6 +114,7 @@
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CapMode.h" />
     <ClInclude Include="CaptureProperties.h" />
     <ClInclude Include="DetectorColor.h" />
     <ClInclude Include="DetectorSlinky.h" />
@@ -130,6 +131,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="CapMode.cpp" />
     <ClCompile Include="CaptureProperties.cpp" />
     <ClCompile Include="DetectorColor.cpp" />
     <ClCompile Include="DetectorSlinky.cpp" />

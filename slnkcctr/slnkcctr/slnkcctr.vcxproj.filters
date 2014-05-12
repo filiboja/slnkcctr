@@ -42,6 +42,9 @@
     <ClInclude Include="DetectorSlinky.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CapMode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -66,6 +69,9 @@
       <Filter>Source Files\MicroProfiler</Filter>
     </ClCompile>
     <ClCompile Include="DetectorSlinky.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CapMode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
