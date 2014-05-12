@@ -24,6 +24,10 @@ static void onFps(int, void*);
 static int fps;
 static int delay;
 
+enum {
+	SUCCESS = 0,
+};
+
 int main(int argc, char *argv[]) {
 	// Configuration
 	const char * const WIN_ORIGINAL = "slnkcctr";
@@ -156,7 +160,7 @@ int main(int argc, char *argv[]) {
 		key = cv::waitKey(delayCur);
 	}
 
-	return 0;
+	return SUCCESS;
 }
 
 static void onFps(int, void*)
