@@ -35,7 +35,7 @@ int main(int argc, char *argv[]) {
 	const int defaultFps = 15; // in case FPS is not provided by `cap`
 	const bool showOriginal = true;
 	const bool reportLongFrames = false;
-	const cv::Size frameSize = cv::Size(320, 240);
+	const cv::Size frameSize = cv::Size(640, 480);
 
 	// Format `double` output
 	std::cout << std::setiosflags(std::ios::fixed) << std::setprecision(3);
