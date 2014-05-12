@@ -71,8 +71,8 @@ DetectorColor::detect(const cv::Mat& imgHsv, const cv::Mat& imgBgr) const {
 
 	border(imgThresholded, 0.25, 0.25, 0.0, 0.0);
 	
-	open(imgThresholded, 5);
-	close(imgThresholded, 5);
+	open(imgThresholded, 2);
+	close(imgThresholded, 2);
 
 	cv::Moments oMoments = cv::moments(imgThresholded);
 	int x = (int)(oMoments.m10 / oMoments.m00);
