@@ -5,14 +5,22 @@
 // cv::
 #include <opencv2/imgproc/imgproc.hpp> // cvtColor, COLOR_BGR2HSV
 
-DetectorSlinky::DetectorSlinky() : detector("detector", 84, 104, 44, 92, 154, 255) {
+DetectorSlinky::DetectorSlinky() : detector("detector", 84, 104, 44, 92, 154, 255),
+	detectorGreen("slinky_green", 52, 72, 54, 255, 190, 255)
+{
 	detector.enableWinVideo("video");
 	detector.enableWinLimits("limits");
+	detectorGreen.enableWinVideo("slinky_green/video");
+	detectorGreen.enableWinLimits("slinky_green/limits");
 }
 
-DetectorSlinky::DetectorSlinky(const cv::Size& imgSize) : detector("detector", 84, 104, 44, 92, 154, 255) {
+DetectorSlinky::DetectorSlinky(const cv::Size& imgSize) : detector("detector", 84, 104, 44, 92, 154, 255),
+	detectorGreen("slinky_green", 52, 72, 54, 255, 190, 255)
+{
 	detector.enableWinVideo("video", imgSize.width, imgSize.height);
 	detector.enableWinLimits("limits");
+	detectorGreen.enableWinVideo("slinky_green/video", imgSize.width, imgSize.height);
+	detectorGreen.enableWinLimits("slinky_green/limits");
 }
 
 FrameAnnotation
@@ -22,12 +30,23 @@ DetectorSlinky::detect(const cv::Mat& img) const {
 	cv::cvtColor(img, imgHsv, cv::COLOR_BGR2HSV);
 
 	FrameAnnotation annotation;
-	DetectorColor::Pos pos = detector.detect(imgHsv, img); // Detect object
-	const std::string id = "DetectColor";
-	const int radius = 16;
-	const FrameObject::Color color(255, 0, 0); // blue
-	FrameObject frameObject(id, pos, radius, color);
-	annotation.insert(frameObject);
+
+	{ // blue
+		const DetectorColor::Pos pos = detector.detect(imgHsv, img); // Detect object
+		const std::string id = "slinky_blue";
+		const int radius = 32;
+		const FrameObject::Color color(255, 0, 0); // blue
+		FrameObject frameObject(id, pos, radius, color);
+		annotation.insert(frameObject);
+	}
+	{ // green
+		const DetectorColor::Pos pos = detectorGreen.detect(imgHsv, img); // Detect object
+		const std::string id = "slinky_green";
+		const int radius = 32;
+		const FrameObject::Color color(0, 255, 0); // green
+		FrameObject frameObject(id, pos, radius, color);
+		annotation.insert(frameObject);
+	}
 
 	return annotation;
 }

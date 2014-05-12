@@ -15,4 +15,5 @@ public:
 	FrameAnnotation detect(const cv::Mat& img) const;
 private:
 	DetectorColor detector;
+	DetectorColor detectorGreen;
 };
