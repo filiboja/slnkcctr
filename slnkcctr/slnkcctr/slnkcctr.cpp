@@ -15,6 +15,10 @@
 #include <opencv2/highgui/highgui.hpp> // VideoCapture, namedWindow, imshow
 #include <opencv2/imgproc/imgproc.hpp> // resize
 
+// boost::
+#include <boost/program_options.hpp>
+namespace po = boost::program_options;
+
 #include "CapMode.h" // CapMode
 #include "CaptureProperties.h" // CaptureProperties
 #include "DetectorSlinky.h" // DetectorColor
@@ -26,25 +30,82 @@ static int delay;
 
 enum {
 	SUCCESS = 0,
+	ERROR_SOURCE_OPEN = 1,
+	ERROR_UNKNOWN_OPTION = 2,
 };
 
 int main(int argc, char *argv[]) {
-	// Configuration
-	const char * const WIN_ORIGINAL = "slnkcctr";
+	const char * const configFilename = "slnkcctr.ini";
+	const std::string sourceWinname = "Source";
+
+	CapMode sourceCapMode = CAP_MODE_DEVICE;
+	int sourceCapDevice = 0;
+	std::string sourceCapFilename;
+	int sourceFrameWidth;
+	int sourceFrameHeight;
+	double sourceFps;
+	bool sourceShow = true;
+
+	po::options_description optionsBasic("Basic");
+	optionsBasic.add_options()
+		("help", "produce help message")
+	;
+
+	po::options_description optionsSource("Source");
+	optionsSource.add_options()
+		("source.mode,m", po::value<CapMode>(&sourceCapMode)->default_value(sourceCapMode), "mode (d[evice] or f[ile])")
+		("source.device,d", po::value<int>(&sourceCapDevice)->default_value(sourceCapDevice), "source capture device (only used in device mode)")
+		("source.filename,f", po::value<std::string>(&sourceCapFilename), "source video filename (only used in file mode)")
+		("source.width", po::value<int>(&sourceFrameWidth), "frame width (leave empty for original)")
+		("source.height", po::value<int>(&sourceFrameHeight), "frame height (leave empty for original)")
+		("source.fps", po::value<double>(&sourceFps), "frames per second")
+		("source.show", po::value<bool>(&sourceShow)->default_value(true, "true"), "show source video stream")
+	;
+
+	// Detector options
+	int detectorFrameWidth;
+	int detectorFrameHeight;
+	bool detectorShow = true;
+
+	po::options_description optionsDetector("Detector");
+	optionsSource.add_options()
+		("detector.width", po::value<int>(&detectorFrameWidth), "frame width (leave empty for original)")
+		("detector.height", po::value<int>(&detectorFrameHeight), "frame height (leave empty for original)")
+		("detector.show", po::value<bool>(&detectorShow)->default_value(true, "true"), "show detector video stream")
+	;
+
+	po::options_description options("Options");
+	options.add(optionsBasic).add(optionsSource).add(optionsDetector);
+
+	po::variables_map vm;
+
+	// Load options from command line
+	try {
+		po::store(po::parse_command_line(argc, argv, options), vm);
+	} catch (po::unknown_option& e) {
+		std::cerr << e.what() << std::endl;
+		return ERROR_UNKNOWN_OPTION;
+	}
+
+	// Load options from configuration file
+	try {
+		po::basic_parsed_options<char> fileOptions = po::parse_config_file<char>(configFilename, optionsBasic);
+		po::store(fileOptions, vm);
+	} catch (po::reading_file& e) {
+		std::cerr << e.what() << std::endl;
+	}
+
+	po::notify(vm);
+
+	if (vm.count("help")) {
+		std::cout << options << std::endl;
+		return SUCCESS;
+	}
+
+	// Configuration (obsolete)
 	const char * const WIN_DETECTOR = "Detector";
 	const int KEY_ESC = 27;
 	const int KEY_PAUSE = 32;
-	double frameWidth = 640.0;
-	double frameHeight = 480.0;
-	CapMode capMode = CAP_MODE_FILE;
-	const int capDevice = 0;
-	const std::string capFilename = "Slinky day.wmv";
-	const bool output = false;
-	const std::string outputFilename = "out.avi";
-	const int defaultFps = 15; // in case FPS is not provided by `cap`
-	const bool showOriginal = true;
-	const bool reportLongFrames = false;
-	const cv::Size frameSize = cv::Size(640, 480);
 	const bool showControls = true;
 	const std::string WIN_CONTROLS = "Playback controls";
 
@@ -57,27 +118,45 @@ int main(int argc, char *argv[]) {
 
 	// Open cap stream
 	cv::VideoCapture cap;
-	switch (capMode) {
+	std::cout << "Source capture mode: " << sourceCapMode << std::endl;
+	switch (sourceCapMode) {
 	case CAP_MODE_DEVICE:
-		std::cout << "Capture mode: device" << std::endl;
-		std::cout << "Capture device: " << capDevice << std::endl;
-		cap = cv::VideoCapture(capDevice);
+		std::cout << "Source device: " << sourceCapDevice << std::endl;
+		cap = cv::VideoCapture(sourceCapDevice);
 		break;
 	case CAP_MODE_FILE:
-		std::cout << "Capture mode: file" << std::endl;
-		std::cout << "Capture filename: " << capFilename << std::endl;
-		cap = cv::VideoCapture(capFilename);
+		std::cout << "Source filename: " << sourceCapFilename << std::endl;
+		cap = cv::VideoCapture(sourceCapFilename);
 		break;
 	}
 	if (!cap.isOpened()) {
-		std::cout << "Could not open capture." << std::endl;
-		std::cout << "Exiting with code 1." << std::endl;
-		return 1;
+		std::cerr << "Could not open source capture." << std::endl;
+		return ERROR_SOURCE_OPEN;
 	}
 
-	// Set
-	//std::cout << "Set frame width: " << cap.set(CV_CAP_PROP_FRAME_WIDTH, frameWidth) << std::endl;
-	//std::cout << "Set frame height: " << cap.set(CV_CAP_PROP_FRAME_HEIGHT, frameHeight) << std::endl;
+	// Set source frame dimensions
+	if (vm.count("source.width")) {
+		if (!cap.set(CV_CAP_PROP_FRAME_WIDTH, (double)sourceFrameWidth)) {
+			std::cerr << "Failed to set source frame width." << std::endl;
+		}
+	}
+	if (vm.count("source.height")) {
+		if (!cap.set(CV_CAP_PROP_FRAME_HEIGHT, (double)sourceFrameHeight)) {
+			std::cerr << "Failed to set source frame height." << std::endl;
+		}
+	}
+
+	// Update source frame dimensions
+	sourceFrameWidth = (int)cap.get(CV_CAP_PROP_FRAME_WIDTH);
+	sourceFrameHeight = (int)cap.get(CV_CAP_PROP_FRAME_HEIGHT);
+
+	// Set detector frame dimensions
+	if (!vm.count("detector.width")) {
+		detectorFrameWidth = sourceFrameWidth;
+	}
+	if (!vm.count("detector.height")) {
+		detectorFrameHeight = sourceFrameHeight;
+	}
 
 	// Print capture info
 	CaptureProperties capProps;
@@ -85,74 +164,70 @@ int main(int argc, char *argv[]) {
 	capProps.print(cap);
 	
 	// Open window
-	if (showOriginal) {
-		cv::namedWindow(WIN_ORIGINAL, cv::WINDOW_NORMAL);
-		cv::resizeWindow(WIN_ORIGINAL, frameSize.width, frameSize.height);
+	if (sourceShow) {
+		cv::namedWindow(sourceWinname, cv::WINDOW_NORMAL);
+		cv::resizeWindow(sourceWinname, sourceFrameWidth, sourceFrameHeight);
 	}
 
-	fps = (int)cap.get(CV_CAP_PROP_FPS);
-	if (fps <= 0) {
-		std::cout << "Failed to get FPS from capture; using default: " << defaultFps << std::endl;
-		fps = defaultFps;
+	// FPS
+	if (!vm.count("source.fps")) {
+		sourceFps = cap.get(CV_CAP_PROP_FPS);
+		if (sourceFps <= 0.0) {
+			std::cerr << "Failed to get FPS from capture." << std::endl;
+			sourceFps = 1.0;
+		}
 	}
-	onFps(0, NULL);
+	assert(sourceFps > 0.0);
+
+	/*onFps(0, NULL);
 	if (showControls) {
 		cv::namedWindow(WIN_CONTROLS, cv::WINDOW_AUTOSIZE);
 		cv::createTrackbar("FPS", WIN_CONTROLS, &fps, 60, onFps);
-	}
+	}*/
+	delay = (int)(1000.0 / sourceFps);
 	std::cout << "Desired FPS: " << fps << std::endl;
 	std::cout << "Frame delay: " << delay << std::endl;
 	std::cout << "Actual FPS: " << 1000.0 / delay << std::endl;
 
-	// Open output video
-	cv::Size size((int) cap.get(CV_CAP_PROP_FRAME_WIDTH), (int) cap.get(CV_CAP_PROP_FRAME_HEIGHT));
-	cv::VideoWriter outputVideo;
-	if (output) {
-		outputVideo.open(outputFilename, -1, fps, size, true);
-		if (!outputVideo.isOpened()) {
-			std::cout << "Could not open output video stream." << std::endl;
-		}
-	}
-
-	DetectorSlinky detector(frameSize);
+	cv::Size detectorFrameSize = cv::Size(detectorFrameWidth, detectorFrameHeight);
+	DetectorSlinky detector(detectorFrameSize);
 
 	// Main loop
 	int key = 0;
 	assert(key != KEY_ESC);
 	bool pause = false;
-	cv::Mat frame;
+	cv::Mat frameSource;
+	cv::Mat frameDetector;
 	clock_t clockBegin = clock();
 	while (key != KEY_ESC) {
 		if (key == KEY_PAUSE) {
 			pause = !pause;
 		}
 		if (!pause) {
-			cap >> frame;
-			if (frame.empty()) {
-				std::cout << "Empty frame." << std::endl;
+			cap >> frameSource;
+			if (frameSource.empty()) {
+				std::cout << "Empty source frame." << std::endl;
 				break;
 			}
-			cv::resize(frame, frame, frameSize, 0.0, 0.0, cv::INTER_AREA);
+			if (sourceShow) {
+				cv::imshow(sourceWinname, frameSource);
+			}
+			cv::resize(frameSource, frameDetector, detectorFrameSize, 0.0, 0.0, cv::INTER_AREA);
 		}
-		FrameAnnotation annotation = detector.detect(frame);
-		if (showOriginal) {
-			cv::Mat annotationImg = cv::Mat::zeros(frame.size(), CV_8UC3);
-			annotation.draw(annotationImg);
-			cv::Mat frameAnnotated = frame + annotationImg;
-			cv::imshow(WIN_ORIGINAL, frameAnnotated);
-		}
-		if (output && outputVideo.isOpened()) {
-			outputVideo << frame;
-		}
+		FrameAnnotation annotation = detector.detect(frameDetector);
+		//if (sourceShow) {
+			//cv::imshow(sourceWinname, frameSource);
+			//cv::Mat annotationImg = cv::Mat::zeros(frameDetector.size(), CV_8UC3);
+			//annotation.draw(annotationImg);
+			//cv::Mat frameAnnotated = frameSource + annotationImg;
+			//cv::imshow(WIN_ORIGINAL, frameAnnotated);
+		//}
 		clock_t clockEnd = clock();
 		assert(clockEnd >= clockBegin);
 		clock_t clockDiff = clockEnd - clockBegin;
 		int msecDiff = clockDiff * 1000 / CLOCKS_PER_SEC;
 		int delayCur = delay - msecDiff;
 		if (delayCur <= 0) {
-			if (reportLongFrames) {
-				std::cout << "Long frame: " << msecDiff << " > " << delay << std::endl;
-			}
 			delayCur = 1;
 		}
 		clockBegin = clockEnd;
