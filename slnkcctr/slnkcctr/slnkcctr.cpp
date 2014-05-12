@@ -65,8 +65,8 @@ int main(int argc, char *argv[]) {
 	}
 
 	// Set
-	std::cout << "Set frame width: " << cap.set(CV_CAP_PROP_FRAME_WIDTH, frameWidth) << std::endl;
-	std::cout << "Set frame height: " << cap.set(CV_CAP_PROP_FRAME_HEIGHT, frameHeight) << std::endl;
+	//std::cout << "Set frame width: " << cap.set(CV_CAP_PROP_FRAME_WIDTH, frameWidth) << std::endl;
+	//std::cout << "Set frame height: " << cap.set(CV_CAP_PROP_FRAME_HEIGHT, frameHeight) << std::endl;
 
 	// Print capture info
 	CaptureProperties capProps;
