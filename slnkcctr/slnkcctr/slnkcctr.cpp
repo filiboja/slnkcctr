@@ -18,6 +18,11 @@
 #include "CaptureProperties.h" // CaptureProperties
 #include "DetectorSlinky.h" // DetectorColor
 
+static void onFps(int, void*);
+
+static int fps;
+static int delay;
+
 int main(int argc, char *argv[]) {
 	// Configuration
 	const char * const WIN_ORIGINAL = "slnkcctr";
@@ -36,6 +41,8 @@ int main(int argc, char *argv[]) {
 	const bool showOriginal = true;
 	const bool reportLongFrames = false;
 	const cv::Size frameSize = cv::Size(640, 480);
+	const bool showControls = true;
+	const std::string WIN_CONTROLS = "Playback controls";
 
 	// Format `double` output
 	std::cout << std::setiosflags(std::ios::fixed) << std::setprecision(3);
@@ -79,12 +86,16 @@ int main(int argc, char *argv[]) {
 		cv::resizeWindow(WIN_ORIGINAL, frameSize.width, frameSize.height);
 	}
 
-	int fps = (int)cap.get(CV_CAP_PROP_FPS);
+	fps = (int)cap.get(CV_CAP_PROP_FPS);
 	if (fps <= 0) {
 		std::cout << "Failed to get FPS from capture; using default: " << defaultFps << std::endl;
 		fps = defaultFps;
 	}
-	int delay = 1000 / fps; // in milliseconds
+	onFps(0, NULL);
+	if (showControls) {
+		cv::namedWindow(WIN_CONTROLS, cv::WINDOW_AUTOSIZE);
+		cv::createTrackbar("FPS", WIN_CONTROLS, &fps, 60, onFps);
+	}
 	std::cout << "Desired FPS: " << fps << std::endl;
 	std::cout << "Frame delay: " << delay << std::endl;
 	std::cout << "Actual FPS: " << 1000.0 / delay << std::endl;
@@ -146,4 +157,12 @@ int main(int argc, char *argv[]) {
 	}
 
 	return 0;
+}
+
+static void onFps(int, void*)
+{
+	if (fps <= 0) {
+		fps = 1;
+	}
+	delay = 1000 / fps; // in milliseconds
 }
