@@ -29,7 +29,7 @@ int main(int argc, char *argv[]) {
 	enum CapMode { CAP_MODE_DEVICE, CAP_MODE_FILE };
 	CapMode capMode = CAP_MODE_FILE;
 	const int capDevice = 0;
-	const std::string capFilename = "C:\\Users\\TTT\\Videos\\Logitech Webcam\\Slinky day.wmv";
+	const std::string capFilename = "Slinky day.wmv";
 	const bool output = false;
 	const std::string outputFilename = "out.avi";
 	const int defaultFps = 15; // in case FPS is not provided by `cap`

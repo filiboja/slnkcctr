@@ -1,6 +1,9 @@
 # Build results
 Profile/
 
+# Input files
+slnkcctr/slnkcctr/Slinky day.wmv
+
 
 ### VisualStudio.gitignore
 ### https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
