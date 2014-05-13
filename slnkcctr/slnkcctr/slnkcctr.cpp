@@ -117,7 +117,7 @@ int main(int argc, char *argv[]) {
 	std::cout << "slnkcctr" << std::endl;
 	std::cout << "Press Escape to exit." << std::endl;
 
-	// Open cap stream
+	// Open source video stream
 	cv::VideoCapture cap;
 	std::cout << "Source capture mode: " << sourceCapMode << std::endl;
 	switch (sourceCapMode) {
