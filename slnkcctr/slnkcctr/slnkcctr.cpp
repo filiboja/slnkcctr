@@ -43,6 +43,7 @@ int main(int argc, char *argv[]) {
 		("help", "produce help message")
 	;
 
+	// Source options
 	CapMode sourceCapMode = CAP_MODE_DEVICE;
 	int sourceCapDevice = 0;
 	std::string sourceCapFilename = "";
