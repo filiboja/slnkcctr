@@ -60,7 +60,7 @@ int main(int argc, char *argv[]) {
 		("source.width", po::value<int>(&sourceFrameWidth), "frame width (leave empty for original)")
 		("source.height", po::value<int>(&sourceFrameHeight), "frame height (leave empty for original)")
 		("source.fps", po::value<double>(&sourceFps), "frames per second")
-		("source.show", po::value<bool>(&sourceShow)->default_value(true, "true"), "show source video stream")
+		("source.show", po::value<bool>(&sourceShow)->default_value(sourceShow), "show source video stream")
 	;
 
 	// Detector options
@@ -72,7 +72,7 @@ int main(int argc, char *argv[]) {
 	optionsDetector.add_options()
 		("detector.width", po::value<int>(&detectorFrameWidth), "frame width (leave empty for original)")
 		("detector.height", po::value<int>(&detectorFrameHeight), "frame height (leave empty for original)")
-		("detector.show", po::value<bool>(&detectorShow)->default_value(true, "true"), "show detector video stream")
+		("detector.show", po::value<bool>(&detectorShow)->default_value(detectorShow), "show detector video stream")
 	;
 
 	po::options_description options("Options");
