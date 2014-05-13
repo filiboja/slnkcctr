@@ -69,7 +69,7 @@ int main(int argc, char *argv[]) {
 	bool detectorShow = true;
 
 	po::options_description optionsDetector("Detector");
-	optionsSource.add_options()
+	optionsDetector.add_options()
 		("detector.width", po::value<int>(&detectorFrameWidth), "frame width (leave empty for original)")
 		("detector.height", po::value<int>(&detectorFrameHeight), "frame height (leave empty for original)")
 		("detector.show", po::value<bool>(&detectorShow)->default_value(true, "true"), "show detector video stream")
