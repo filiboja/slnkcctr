@@ -38,18 +38,18 @@ int main(int argc, char *argv[]) {
 	const char * const configFilename = "slnkcctr.ini";
 	const std::string sourceWinname = "Source";
 
-	CapMode sourceCapMode = CAP_MODE_DEVICE;
-	int sourceCapDevice = 0;
-	std::string sourceCapFilename;
-	int sourceFrameWidth;
-	int sourceFrameHeight;
-	double sourceFps;
-	bool sourceShow = true;
-
 	po::options_description optionsBasic("Basic");
 	optionsBasic.add_options()
 		("help", "produce help message")
 	;
+
+	CapMode sourceCapMode = CAP_MODE_DEVICE;
+	int sourceCapDevice = 0;
+	std::string sourceCapFilename = "";
+	int sourceFrameWidth = 640;
+	int sourceFrameHeight = 480;
+	double sourceFps = 15;
+	bool sourceShow = true;
 
 	po::options_description optionsSource("Source");
 	optionsSource.add_options()
