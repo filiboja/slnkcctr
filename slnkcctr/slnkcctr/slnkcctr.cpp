@@ -64,8 +64,8 @@ int main(int argc, char *argv[]) {
 	;
 
 	// Detector options
-	int detectorFrameWidth;
-	int detectorFrameHeight;
+	int detectorFrameWidth = 640;
+	int detectorFrameHeight = 480;
 	bool detectorShow = true;
 
 	po::options_description optionsDetector("Detector");
