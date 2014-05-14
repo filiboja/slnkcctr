@@ -16,13 +16,10 @@
 #include <opencv2/highgui/highgui.hpp> // VideoCapture, namedWindow, imshow
 #include <opencv2/imgproc/imgproc.hpp> // resize
 
-// boost::
-#include <boost/program_options.hpp>
-namespace po = boost::program_options;
-
 #include "CapMode.h" // CapMode
 #include "CaptureProperties.h" // CaptureProperties
 #include "DetectorSlinky.h" // DetectorColor
+#include "program_options.h" // po, loadConfigFile
 
 static int delay = 50;
 
@@ -31,8 +28,6 @@ enum {
 	ERROR_SOURCE_OPEN = 1,
 	ERROR_UNKNOWN_OPTION = 2,
 };
-
-static void loadConfigFile(const std::string& filename, const po::options_description& options, po::variables_map& vm);
 
 template<typename T>
 std::ostream& operator<<(std::ostream& out, const std::vector<typename T>& t);
@@ -247,16 +242,6 @@ int main(int argc, char *argv[]) {
 	}
 
 	return SUCCESS;
-}
-
-static void loadConfigFile(const std::string& filename, const po::options_description& options, po::variables_map& vm)
-{
-	try {
-		po::basic_parsed_options<char> fileOptions = po::parse_config_file<char>(filename.c_str(), options);
-		po::store(fileOptions, vm);
-	} catch (po::reading_file& e) {
-		std::cerr << e.what() << std::endl;
-	}
 }
 
 template<typename T>
