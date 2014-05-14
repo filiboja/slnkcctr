@@ -9,6 +9,7 @@
 #include <iostream> // cout, endl
 #include <iomanip> // setiosflags, setprecision
 #include <string> // string
+#include <vector> // vector
 
 // cv::
 #include <opencv2/core/core.hpp> // Mat
@@ -46,9 +47,13 @@ int main(int argc, char *argv[]) {
 	std::cout << std::setiosflags(std::ios::fixed) << std::setprecision(3);
 
 	// Basic options
+	typedef std::vector<std::string> ConfigFiles;
+	ConfigFiles configFiles;
+
 	po::options_description optionsBasic("Basic");
 	optionsBasic.add_options()
 		("help", "produce help message")
+		("config.filename", po::value<ConfigFiles>(&configFiles), "configuration file")
 	;
 
 	// Source options
@@ -97,11 +102,13 @@ int main(int argc, char *argv[]) {
 	}
 
 	// Load options from configuration file
-	try {
-		po::basic_parsed_options<char> fileOptions = po::parse_config_file<char>(configFilename, optionsBasic);
-		po::store(fileOptions, vm);
-	} catch (po::reading_file& e) {
-		std::cerr << e.what() << std::endl;
+	loadConfigFile(configFilename, options, vm);
+
+	po::notify(vm);
+
+	// Load options from configuration files specified in `vm`
+	for (ConfigFiles::const_iterator it = configFiles.begin(); it != configFiles.end(); it++) {
+		loadConfigFile(*it, options, vm);
 	}
 
 	po::notify(vm);
