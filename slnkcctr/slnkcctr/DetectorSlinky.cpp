@@ -5,43 +5,47 @@
 // cv::
 #include <opencv2/imgproc/imgproc.hpp> // cvtColor, COLOR_BGR2HSV
 
-DetectorSlinky::DetectorSlinky() : detector("detector", 84, 104, 44, 92, 154, 255),
-	detectorGreen("slinky_green", 52, 72, 54, 255, 190, 255)
+DetectorSlinky::DetectorSlinky(const cv::Size& imgSize) : imgSize(imgSize),
+	detector0("slinky0", imgSize, 84, 104, 44, 92, 154, 255),
+	detector1("slinky1", imgSize, 52, 72, 54, 255, 190, 255)
 {
-	detector.enableWinVideo("video");
-	detector.enableWinLimits("limits");
-	detectorGreen.enableWinVideo("slinky_green/video");
-	detectorGreen.enableWinLimits("slinky_green/limits");
-}
-
-DetectorSlinky::DetectorSlinky(const cv::Size& imgSize) : detector("detector", 84, 104, 44, 92, 154, 255),
-	detectorGreen("slinky_green", 52, 72, 54, 255, 190, 255)
-{
-	detector.enableWinVideo("video", imgSize.width, imgSize.height);
-	detector.enableWinLimits("limits");
-	detectorGreen.enableWinVideo("slinky_green/video", imgSize.width, imgSize.height);
-	detectorGreen.enableWinLimits("slinky_green/limits");
+	detector0.enableWinVideo("slinky0.video", imgSize.width, imgSize.height);
+	detector0.enableWinLimits("slinky0.params");
+	detector1.enableWinVideo("slinky1.video", imgSize.width, imgSize.height);
+	detector1.enableWinLimits("slinky1.params");
 }
 
 FrameAnnotation
 DetectorSlinky::detect(const cv::Mat& img) const {
-	// Convert `img` to HSV color space
+	const cv::Size& originalSize = img.size();
+	const double widthRatio = (double)originalSize.width / imgSize.width;
+	const double heightRatio = (double)originalSize.height / imgSize.height;
+
+	// Resize source image
+	cv::Mat imgResized;
+	cv::resize(img, imgResized, imgSize, 0.0, 0.0, cv::INTER_AREA);
+
+	// Convert image to HSV color space
 	cv::Mat imgHsv;
-	cv::cvtColor(img, imgHsv, cv::COLOR_BGR2HSV);
+	cv::cvtColor(imgResized, imgHsv, cv::COLOR_BGR2HSV);
 
 	FrameAnnotation annotation;
 
-	{ // blue
-		const DetectorColor::Pos pos = detector.detect(imgHsv, img); // Detect object
-		const std::string id = "slinky_blue";
+	{ // 0
+		DetectorColor::Pos pos = detector0.detect(imgHsv, imgResized); // Detect object
+		pos.x = (int)(pos.x * widthRatio);
+		pos.y = (int)(pos.y * heightRatio);
+		const std::string id = "slinky0";
 		const int radius = 32;
 		const FrameObject::Color color(255, 0, 0); // blue
 		FrameObject frameObject(id, pos, radius, color);
 		annotation.insert(frameObject);
 	}
-	{ // green
-		const DetectorColor::Pos pos = detectorGreen.detect(imgHsv, img); // Detect object
-		const std::string id = "slinky_green";
+	{ // 1
+		DetectorColor::Pos pos = detector1.detect(imgHsv, imgResized); // Detect object
+		pos.x = (int)(pos.x * widthRatio);
+		pos.y = (int)(pos.y * heightRatio);
+		const std::string id = "slinky1";
 		const int radius = 32;
 		const FrameObject::Color color(0, 255, 0); // green
 		FrameObject frameObject(id, pos, radius, color);
