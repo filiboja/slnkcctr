@@ -10,10 +10,10 @@
 
 class DetectorSlinky {
 public:
-	DetectorSlinky();
 	DetectorSlinky(const cv::Size& imgSize);
 	FrameAnnotation detect(const cv::Mat& img) const;
 private:
-	DetectorColor detector;
-	DetectorColor detectorGreen;
+	cv::Size imgSize;
+	DetectorColor detector0;
+	DetectorColor detector1;
 };
