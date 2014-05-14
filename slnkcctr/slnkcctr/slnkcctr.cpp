@@ -31,6 +31,8 @@ enum {
 	ERROR_UNKNOWN_OPTION = 2,
 };
 
+static void loadConfigFile(const std::string& filename, const po::options_description& options, po::variables_map& vm);
+
 int main(int argc, char *argv[]) {
 	// Constants
 	const char * const configFilename = "slnkcctr.ini";
@@ -235,4 +237,14 @@ int main(int argc, char *argv[]) {
 	}
 
 	return SUCCESS;
+}
+
+static void loadConfigFile(const std::string& filename, const po::options_description& options, po::variables_map& vm)
+{
+	try {
+		po::basic_parsed_options<char> fileOptions = po::parse_config_file<char>(filename.c_str(), options);
+		po::store(fileOptions, vm);
+	} catch (po::reading_file& e) {
+		std::cerr << e.what() << std::endl;
+	}
 }
