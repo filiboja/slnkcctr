@@ -15,7 +15,7 @@ public:
 	typedef int Limit;
 	typedef cv::Point2i Pos;
 
-	DetectorColor(const std::string& id, const cv::Size& imgSize,
+	DetectorColor(const std::string& id,
 		const Limit& hueMin = HUE_MIN, const Limit& hueMax = HUE_MAX,
 		const Limit& satMin = SAT_MIN, const Limit& satMax = SAT_MAX,
 		const Limit& valMin = VAL_MIN, const Limit& valMax = VAL_MAX);
@@ -30,22 +30,15 @@ public:
 	friend bool operator<(const DetectorColor& left, const DetectorColor& right);
 private:
 	cv::Mat threshold(const cv::Mat& imgHsv) const;
-	cv::Mat crop(const cv::Mat& img) const;
 
 	const std::string id;
-	const cv::Size imgSize;
 
-	int iLowH;
-	int iHighH;
-	int iLowS; 
-	int iHighS;
-	int iLowV;
-	int iHighV;
-	
-	mutable int cropX; // TODO: Remove `mutable` modifier
-	mutable int cropWidth;
-	mutable int cropY;
-	mutable int cropHeight;
+	Limit iLowH;
+	Limit iHighH;
+	Limit iLowS; 
+	Limit iHighS;
+	Limit iLowV;
+	Limit iHighV;
 
 	bool videoWinUse;
 	std::string videoWinName;
