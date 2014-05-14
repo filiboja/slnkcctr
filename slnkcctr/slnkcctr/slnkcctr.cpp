@@ -34,6 +34,9 @@ enum {
 
 static void loadConfigFile(const std::string& filename, const po::options_description& options, po::variables_map& vm);
 
+template<typename T>
+std::ostream& operator<<(std::ostream& out, const std::vector<typename T>& t);
+
 int main(int argc, char *argv[]) {
 	// Constants
 	const char * const configFilename = "slnkcctr.ini";
@@ -254,4 +257,13 @@ static void loadConfigFile(const std::string& filename, const po::options_descri
 	} catch (po::reading_file& e) {
 		std::cerr << e.what() << std::endl;
 	}
+}
+
+template<typename T>
+std::ostream& operator<<(std::ostream& out, const std::vector<typename T>& t)
+{
+	for (std::vector<T>::const_iterator it = t.begin(); it != t.end(); it++) {
+		out << *it << std::endl;
+	}
+	return out;
 }
