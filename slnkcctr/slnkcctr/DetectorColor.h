@@ -11,6 +11,7 @@
 #include <opencv2/core/core.hpp> // Mat, Point2i, Size
 
 #include "CropFilter.h"
+#include "OpenFilter.h"
 
 class DetectorColor {
 public:
@@ -25,6 +26,7 @@ private:
 	cv::Mat threshold(const cv::Mat& imgHsv) const;
 
 	CropFilter cropFilter;
+	OpenFilter openFilter;
 
 	std::string name;
 	cv::Size frameSize;

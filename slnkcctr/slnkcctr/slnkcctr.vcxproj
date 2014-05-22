@@ -123,6 +123,7 @@
     <ClInclude Include="DetectorSlinky.h" />
     <ClInclude Include="FrameAnnotation.h" />
     <ClInclude Include="FrameObject.h" />
+    <ClInclude Include="OpenFilter.h" />
     <ClInclude Include="program_options.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -142,6 +143,7 @@
     <ClCompile Include="DetectorSlinky.cpp" />
     <ClCompile Include="FrameAnnotation.cpp" />
     <ClCompile Include="FrameObject.cpp" />
+    <ClCompile Include="OpenFilter.cpp" />
     <ClCompile Include="program_options.cpp" />
     <ClCompile Include="slnkcctr.cpp" />
     <ClCompile Include="stdafx.cpp">

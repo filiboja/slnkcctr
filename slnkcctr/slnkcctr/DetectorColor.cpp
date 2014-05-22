@@ -13,14 +13,14 @@
 
 #include "program_options.h"
 
-static void open(cv::Mat& img, const int& size);
 static void close(cv::Mat& img, const int& size);
 
 DetectorColor::DetectorColor(const std::string& filename, const cv::Size& frameSize)
 	: frameSize(frameSize),
 	hueMin(HUE_MIN), hueMax(HUE_MAX), satMin(SAT_MIN), satMax(SAT_MAX), valMin(VAL_MIN), valMax(VAL_MAX),
 	windowVideoShow(false), windowLimitsShow(false),
-	cropFilter(CropFilter::RoiType(0, 0, frameSize.width, frameSize.height))
+	cropFilter(CropFilter::RoiType(0, 0, frameSize.width, frameSize.height)),
+	openFilter(2) // TODO: Choose a sensible value.
 {
 	ConfigLimit configHueMin = hueMin;
 	ConfigLimit configHueMax = hueMax;
@@ -102,6 +102,7 @@ DetectorColor::createWindowLimits() {
 	cv::createTrackbar("Value max", winnameChar, &iHighV, VAL_MAX, onTrackbarLimit, this);
 
 	cropFilter.createTrackbars(winname, frameSize.width, frameSize.height);
+	openFilter.createTrackbars(winname, 5); // TODO: Choose a sensible value.
 }
 
 DetectorColor::Pos
@@ -112,7 +113,7 @@ DetectorColor::detect(const cv::Mat& imgHsv, const cv::Mat& imgBgr) const {
 	const cv::Mat imgCropped = cropFilter.filter(imgHsv);
 	cv::Mat imgThresholded = threshold(imgCropped);
 
-	open(imgThresholded, 2);
+	openFilter.filter(imgThresholded);
 	close(imgThresholded, 2);
 
 	cv::Moments oMoments = cv::moments(imgThresholded);
@@ -141,12 +142,6 @@ DetectorColor::threshold(const cv::Mat& imgHsv) const
 	cv::Mat imgThresholded;
 	cv::inRange(imgHsv, lowerb, upperb, imgThresholded);
 	return imgThresholded;
-}
-
-static void open(cv::Mat& img, const int& size) {
-	//morphological opening (removes small objects from the foreground)
-	cv::erode(img, img, cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(size, size)));
-	cv::dilate(img, img, cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(size, size)));
 }
 
 static void close(cv::Mat& img, const int& size) {
