@@ -12,5 +12,8 @@ void loadConfigFile(const std::string& filename, const po::options_description& 
 		cerr << e.what() << std::endl;
 	} catch (po::invalid_option_value& e) {
 		cerr << e.what() << std::endl;
+	} catch (po::error_with_option_name& e) {
+		// unrecognised option
+		cerr << e.what() << std::endl;
 	}
 }
