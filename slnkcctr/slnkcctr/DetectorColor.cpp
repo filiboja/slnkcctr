@@ -11,65 +11,109 @@
 // namedWindow, CV_WINDOW_NORMAL, imshow, resizeWindow, destroyWindow, createTrackbar
 #include <opencv2/imgproc/imgproc.hpp> // Moments, moments
 
+#include "program_options.h"
+
 static void open(cv::Mat& img, const int& size);
 static void close(cv::Mat& img, const int& size);
 
-DetectorColor::DetectorColor(const std::string& id, const cv::Size& imgSize,
-	const Limit& hueMin, const Limit& hueMax,
-	const Limit& satMin, const Limit& satMax,
-	const Limit& valMin, const Limit& valMax)
-	: id(id), imgSize(imgSize),
-	iLowH(hueMin), iHighH(hueMax),
-	iLowS(satMin), iHighS(satMax),
-	iLowV(valMin), iHighV(valMax),
-	cropX(0), cropWidth(imgSize.width),
-	cropY(0), cropHeight(imgSize.height),
-	videoWinUse(false), limitsWinUse(false)
-{}
+DetectorColor::DetectorColor(const std::string& filename, const cv::Size& frameSize)
+	: frameSize(frameSize),
+	cropX(0), cropWidth(frameSize.width), cropY(0), cropHeight(frameSize.height),
+	hueMin(HUE_MIN), hueMax(HUE_MAX), satMin(SAT_MIN), satMax(SAT_MAX), valMin(VAL_MIN), valMax(VAL_MAX),
+	windowVideoShow(false), windowLimitsShow(false)
+{
+	ConfigLimit configHueMin = hueMin;
+	ConfigLimit configHueMax = hueMax;
+	ConfigLimit configSatMin = satMin;
+	ConfigLimit configSatMax = satMax;
+	ConfigLimit configValMin = valMin;
+	ConfigLimit configValMax = valMax;
+
+	po::options_description options;
+	options.add_options()
+		("name", po::value<std::string>(&name))
+		("crop.x", po::value<Crop>(&cropX)->default_value(cropX))
+		("crop.width", po::value<Crop>(&cropWidth)->default_value(cropWidth))
+		("crop.y", po::value<Crop>(&cropY)->default_value(cropY))
+		("crop.height", po::value<Crop>(&cropHeight)->default_value(cropHeight))
+		("color.hue.min", po::value<ConfigLimit>(&configHueMin))
+		("color.hue.max", po::value<ConfigLimit>(&configHueMax))
+		("color.sat.min", po::value<ConfigLimit>(&configSatMin))
+		("color.sat.max", po::value<ConfigLimit>(&configSatMax))
+		("color.val.min", po::value<ConfigLimit>(&configValMin))
+		("color.val.max", po::value<ConfigLimit>(&configValMax))
+		("window.video.show", po::value<bool>(&windowVideoShow)->default_value(windowVideoShow))
+		("window.limits.show", po::value<bool>(&windowLimitsShow)->default_value(windowLimitsShow))
+	;
+	po::variables_map vm;
+	loadConfigFile(filename, options, vm);
+	po::notify(vm);
+
+	// TODO: Check for values out of bounds (crop and limits).
+
+	hueMin = configHueMin;
+	hueMax = configHueMax;
+	satMin = configSatMin;
+	satMax = configSatMax;
+	valMin = configValMin;
+	valMax = configValMax;
+
+	if (windowVideoShow) {
+		createWindowVideo();
+	}
+	if (windowLimitsShow) {
+		createWindowLimits();
+	}
+}
 
 DetectorColor::~DetectorColor() {
-	if (videoWinUse) {
-		cv::destroyWindow(videoWinName);
+	if (windowVideoShow) {
+		cv::destroyWindow(windowVideoName());
 	}
-	if (limitsWinUse) {
-		cv::destroyWindow(limitsWinName);
+	if (windowLimitsShow) {
+		cv::destroyWindow(windowLimitsName());
 	}
 }
 
 void
-DetectorColor::enableWinVideo(const std::string& winname, const int& width, const int& height) {
-	videoWinUse = true;
-	videoWinName = winname;
-
-	// Create window
-	cv::namedWindow(videoWinName, cv::WINDOW_NORMAL);
-	cv::resizeWindow(videoWinName, width, height);
+DetectorColor::createWindowVideo() const {
+	cv::namedWindow(windowVideoName(), cv::WINDOW_NORMAL);
+	cv::resizeWindow(windowVideoName(), frameSize.width, frameSize.height);
 }
 
 void
-DetectorColor::enableWinLimits(const std::string& winname) {
-	limitsWinUse = true;
-	limitsWinName = winname;
+DetectorColor::createWindowLimits() {
+	std::string winname = windowLimitsName();
 
 	// Create window
-	cv::namedWindow(limitsWinName, cv::WINDOW_NORMAL);
+	cv::namedWindow(winname, cv::WINDOW_NORMAL);
 
 	// Create trackbars
-	const char * const winnameChar = limitsWinName.c_str();
+	const char * const winnameChar = winname.c_str();
 	
-	cv::createTrackbar("Hue min", winnameChar, &iLowH, HUE_MAX); //Hue (0 - 179)
-	cv::createTrackbar("Hue max", winnameChar, &iHighH, HUE_MAX);
-	cv::createTrackbar("Saturation min", winnameChar, &iLowS, SAT_MAX); //Saturation (0 - 255)
-	cv::createTrackbar("Saturation max", winnameChar, &iHighS, SAT_MAX);
-	cv::createTrackbar("Value min", winnameChar, &iLowV, VAL_MAX); //Value (0 - 255)
-	cv::createTrackbar("Value max", winnameChar, &iHighV, VAL_MAX);
+	// Limits
+	iLowH = hueMin;
+	iHighH = hueMax;
+	iLowS = satMin;
+	iHighS = satMax;
+	iLowV = valMin;
+	iHighV = valMax;
+	cv::createTrackbar("Hue min", winnameChar, &iLowH, HUE_MAX, onTrackbarLimit, this); // Hue (0 - 179)
+	cv::createTrackbar("Hue max", winnameChar, &iHighH, HUE_MAX, onTrackbarLimit, this);
+	cv::createTrackbar("Saturation min", winnameChar, &iLowS, SAT_MAX, onTrackbarLimit, this); // Saturation (0 - 255)
+	cv::createTrackbar("Saturation max", winnameChar, &iHighS, SAT_MAX, onTrackbarLimit, this);
+	cv::createTrackbar("Value min", winnameChar, &iLowV, VAL_MAX, onTrackbarLimit, this); // Value (0 - 255)
+	cv::createTrackbar("Value max", winnameChar, &iHighV, VAL_MAX, onTrackbarLimit, this);
 
-	// TODO: Add callback functions that ensure that the values define a valid roi at all times
-	// and preferably update the other trackbars respectively.
-	cv::createTrackbar("Crop X", winnameChar, &cropX, imgSize.width);
-	cv::createTrackbar("Crop width", winnameChar, &cropWidth, imgSize.width);
-	cv::createTrackbar("Crop Y", winnameChar, &cropY, imgSize.height);
-	cv::createTrackbar("Crop height", winnameChar, &cropHeight, imgSize.height);
+	// Crop
+	iCropX = cropX;
+	iCropWidth = cropWidth;
+	iCropY = cropY;
+	iCropHeight = cropHeight;
+	cv::createTrackbar("Crop X", winnameChar, &iCropX, frameSize.width, onTrackbarCrop, this);
+	cv::createTrackbar("Crop width", winnameChar, &iCropWidth, frameSize.width, onTrackbarCrop, this);
+	cv::createTrackbar("Crop Y", winnameChar, &iCropY, frameSize.height, onTrackbarCrop, this);
+	cv::createTrackbar("Crop height", winnameChar, &iCropHeight, frameSize.height, onTrackbarCrop, this);
 }
 
 DetectorColor::Pos
@@ -89,14 +133,14 @@ DetectorColor::detect(const cv::Mat& imgHsv, const cv::Mat& imgBgr) const {
 	int y = (int)(oMoments.m01 / oMoments.m00);
 	// TODO: Report null instead of (0, 0) in case the object wasn't detected at all
 	
-	if (videoWinUse) {
+	if (windowVideoShow) {
 		const cv::Mat& imgBgrCropped = crop(imgBgr);
 		cv::Mat imgMasked;
 		imgBgrCropped.copyTo(imgMasked, imgThresholded); // apply mask `imgThresholded` to `imgBgr`
 		const Pos pos = Pos(x, y);
 		const cv::Scalar color(0, 0, 255); // red
 		cv::circle(imgMasked, pos, 4, color, 2);
-		cv::imshow(videoWinName, imgMasked);
+		cv::imshow(windowVideoName(), imgMasked);
 	}
 
 	return Pos(cropX + x, cropY + y);
@@ -106,7 +150,7 @@ cv::Mat
 DetectorColor::crop(const cv::Mat& img) const
 {
 	// Ensure that roi lies in the image and is non-empty in both dimensions
-	if (cropX < 0) {
+	/*if (cropX < 0) {
 		cropX = 0;
 	}
 	if (cropX >= img.cols) {
@@ -129,7 +173,15 @@ DetectorColor::crop(const cv::Mat& img) const
 	}
 	if (cropHeight <= 0) {
 		cropHeight = 1;
-	}
+	}*/
+	assert(cropX >= 0);
+	assert((int)cropX <= img.cols - 1);
+	assert((int)(cropX + cropWidth) <= img.cols);
+	assert(cropWidth > 0);
+	assert(cropY >= 0);
+	assert((int)cropY <= img.rows - 1);
+	assert((int)(cropY + cropHeight) <= img.rows);
+	assert(cropHeight > 0);
 
 	const cv::Rect roi = cv::Rect(cropX, cropY, cropWidth, cropHeight);
 	
@@ -139,8 +191,8 @@ DetectorColor::crop(const cv::Mat& img) const
 cv::Mat
 DetectorColor::threshold(const cv::Mat& imgHsv) const
 {
-	const cv::Vec3b lowerb = cv::Vec3b(iLowH, iLowS, iLowV);
-	const cv::Vec3b upperb = cv::Vec3b(iHighH, iHighS, iHighV);
+	const cv::Vec3b lowerb = cv::Vec3b(hueMin, satMin, valMin);
+	const cv::Vec3b upperb = cv::Vec3b(hueMax, satMax, valMax);
 	cv::Mat imgThresholded;
 	cv::inRange(imgHsv, lowerb, upperb, imgThresholded);
 	return imgThresholded;
@@ -158,7 +210,38 @@ static void close(cv::Mat& img, const int& size) {
 	cv::erode(img, img, cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(size, size)));
 }
 
-bool
-operator<(const DetectorColor& left, const DetectorColor& right) {
-	return left.id < right.id;
+std::string
+DetectorColor::windowVideoName() const {
+	return name + ".video";
+}
+
+std::string
+DetectorColor::windowLimitsName() const {
+	return name + ".limits";
+}
+
+void DetectorColor::onTrackbarLimit(int, void * object) {
+	DetectorColor * detector = (DetectorColor*) object;
+	detector->updateLimit();
+}
+
+void DetectorColor::updateLimit() {
+	hueMin = iLowH;
+	hueMax = iHighH;
+	satMin = iLowS;
+	satMax = iHighS;
+	valMin = iLowV;
+	valMax = iHighV;
+}
+
+void DetectorColor::onTrackbarCrop(int, void * object) {
+	DetectorColor * detector = (DetectorColor*) object;
+	detector->updateCrop();
+}
+
+void DetectorColor::updateCrop() {
+	cropX = iCropX;
+	cropWidth = iCropWidth;
+	cropY = iCropY;
+	cropHeight = iCropHeight;
 }

@@ -111,6 +111,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <None Include="config\magic\magic0.ini" />
+    <None Include="config\magic\magic1.ini" />
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>

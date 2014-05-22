@@ -19,6 +19,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
+    <None Include="config\magic\magic0.ini">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="config\magic\magic1.ini">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">

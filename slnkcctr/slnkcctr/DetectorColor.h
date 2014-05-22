@@ -8,17 +8,13 @@
 #include <string> // string
 
 // cv::
-#include <opencv2/core/core.hpp> // Mat, Point2i
+#include <opencv2/core/core.hpp> // Mat, Point2i, Size
 
 class DetectorColor {
 public:
-	typedef int Limit;
 	typedef cv::Point2i Pos;
 
-	DetectorColor(const std::string& id, const cv::Size& imgSize,
-		const Limit& hueMin = HUE_MIN, const Limit& hueMax = HUE_MAX,
-		const Limit& satMin = SAT_MIN, const Limit& satMax = SAT_MAX,
-		const Limit& valMin = VAL_MIN, const Limit& valMax = VAL_MAX);
+	DetectorColor(const std::string& filename, const cv::Size& frameSize);
 	~DetectorColor();
 	
 	void enableWinVideo(const std::string& winname, const int& width = 640, const int& height = 480);
@@ -32,26 +28,52 @@ private:
 	cv::Mat threshold(const cv::Mat& imgHsv) const;
 	cv::Mat crop(const cv::Mat& img) const;
 
-	const std::string id;
-	const cv::Size imgSize;
+	std::string name;
+	cv::Size frameSize;
 
+	// Limits
+	typedef unsigned int ConfigLimit;
+	typedef unsigned char Limit;
+	Limit hueMin;
+	Limit hueMax;
+	Limit satMin;
+	Limit satMax;
+	Limit valMin;
+	Limit valMax;
+
+	// For trackbars
 	int iLowH;
 	int iHighH;
 	int iLowS; 
 	int iHighS;
 	int iLowV;
 	int iHighV;
+	static void onTrackbarLimit(int, void * object);
+	void updateLimit();
 	
-	mutable int cropX; // TODO: Remove `mutable` modifier
-	mutable int cropWidth;
-	mutable int cropY;
-	mutable int cropHeight;
+	// Crop
+	typedef unsigned int Crop;
+	Crop cropX;
+	Crop cropWidth;
+	Crop cropY;
+	Crop cropHeight;
 
-	bool videoWinUse;
-	std::string videoWinName;
+	// For trackbars
+	int iCropX;
+	int iCropWidth;
+	int iCropY;
+	int iCropHeight;
+	static void onTrackbarCrop(int, void * object);
+	void updateCrop();
 
-	bool limitsWinUse;
-	std::string limitsWinName;
+	bool windowVideoShow;
+	bool windowLimitsShow;
+
+	std::string windowVideoName() const;
+	std::string windowLimitsName() const;
+
+	void createWindowVideo() const;
+	void createWindowLimits();
 
 	static const Limit HUE_MIN = 0;
 	static const Limit HUE_MAX = 179;
@@ -60,6 +82,3 @@ private:
 	static const Limit VAL_MIN = 0;
 	static const Limit VAL_MAX = 255;
 };
-
-// Only considers `id`
-bool operator<(const DetectorColor& left, const DetectorColor& right);

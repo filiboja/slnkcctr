@@ -6,14 +6,9 @@
 #include <opencv2/imgproc/imgproc.hpp> // cvtColor, COLOR_BGR2HSV
 
 DetectorSlinky::DetectorSlinky(const cv::Size& imgSize) : imgSize(imgSize),
-	detector0("slinky0", imgSize, 84, 104, 44, 92, 154, 255),
-	detector1("slinky1", imgSize, 52, 72, 54, 255, 190, 255)
-{
-	detector0.enableWinVideo("slinky0.video", imgSize.width, imgSize.height);
-	detector0.enableWinLimits("slinky0.params");
-	detector1.enableWinVideo("slinky1.video", imgSize.width, imgSize.height);
-	detector1.enableWinLimits("slinky1.params");
-}
+	detector0("config/magic/magic0.ini", imgSize),
+	detector1("config/magic/magic1.ini", imgSize)
+{}
 
 FrameAnnotation
 DetectorSlinky::detect(const cv::Mat& img) const {
