@@ -18,9 +18,9 @@ static void close(cv::Mat& img, const int& size);
 
 DetectorColor::DetectorColor(const std::string& filename, const cv::Size& frameSize)
 	: frameSize(frameSize),
-	cropX(0), cropWidth(frameSize.width), cropY(0), cropHeight(frameSize.height),
 	hueMin(HUE_MIN), hueMax(HUE_MAX), satMin(SAT_MIN), satMax(SAT_MAX), valMin(VAL_MIN), valMax(VAL_MAX),
-	windowVideoShow(false), windowLimitsShow(false)
+	windowVideoShow(false), windowLimitsShow(false),
+	cropFilter(CropFilter::RoiType(0, 0, frameSize.width, frameSize.height))
 {
 	ConfigLimit configHueMin = hueMin;
 	ConfigLimit configHueMax = hueMax;
@@ -32,10 +32,6 @@ DetectorColor::DetectorColor(const std::string& filename, const cv::Size& frameS
 	po::options_description options;
 	options.add_options()
 		("name", po::value<std::string>(&name))
-		("crop.x", po::value<Crop>(&cropX)->default_value(cropX))
-		("crop.width", po::value<Crop>(&cropWidth)->default_value(cropWidth))
-		("crop.y", po::value<Crop>(&cropY)->default_value(cropY))
-		("crop.height", po::value<Crop>(&cropHeight)->default_value(cropHeight))
 		("color.hue.min", po::value<ConfigLimit>(&configHueMin))
 		("color.hue.max", po::value<ConfigLimit>(&configHueMax))
 		("color.sat.min", po::value<ConfigLimit>(&configSatMin))
@@ -105,15 +101,7 @@ DetectorColor::createWindowLimits() {
 	cv::createTrackbar("Value min", winnameChar, &iLowV, VAL_MAX, onTrackbarLimit, this); // Value (0 - 255)
 	cv::createTrackbar("Value max", winnameChar, &iHighV, VAL_MAX, onTrackbarLimit, this);
 
-	// Crop
-	iCropX = cropX;
-	iCropWidth = cropWidth;
-	iCropY = cropY;
-	iCropHeight = cropHeight;
-	cv::createTrackbar("Crop X", winnameChar, &iCropX, frameSize.width, onTrackbarCrop, this);
-	cv::createTrackbar("Crop width", winnameChar, &iCropWidth, frameSize.width, onTrackbarCrop, this);
-	cv::createTrackbar("Crop Y", winnameChar, &iCropY, frameSize.height, onTrackbarCrop, this);
-	cv::createTrackbar("Crop height", winnameChar, &iCropHeight, frameSize.height, onTrackbarCrop, this);
+	cropFilter.createTrackbars(winname, frameSize.width, frameSize.height);
 }
 
 DetectorColor::Pos
@@ -121,8 +109,7 @@ DetectorColor::detect(const cv::Mat& imgHsv, const cv::Mat& imgBgr) const {
 	assert(imgHsv.channels() == 3);
 	assert(imgHsv.size() == imgBgr.size());
 
-	const cv::Mat& imgCropped = crop(imgHsv);
-
+	const cv::Mat imgCropped = cropFilter.filter(imgHsv);
 	cv::Mat imgThresholded = threshold(imgCropped);
 
 	open(imgThresholded, 2);
@@ -134,7 +121,7 @@ DetectorColor::detect(const cv::Mat& imgHsv, const cv::Mat& imgBgr) const {
 	// TODO: Report null instead of (0, 0) in case the object wasn't detected at all
 	
 	if (windowVideoShow) {
-		const cv::Mat& imgBgrCropped = crop(imgBgr);
+		const cv::Mat imgBgrCropped = cropFilter.filter(imgBgr);
 		cv::Mat imgMasked;
 		imgBgrCropped.copyTo(imgMasked, imgThresholded); // apply mask `imgThresholded` to `imgBgr`
 		const Pos pos = Pos(x, y);
@@ -143,49 +130,7 @@ DetectorColor::detect(const cv::Mat& imgHsv, const cv::Mat& imgBgr) const {
 		cv::imshow(windowVideoName(), imgMasked);
 	}
 
-	return Pos(cropX + x, cropY + y);
-}
-
-cv::Mat
-DetectorColor::crop(const cv::Mat& img) const
-{
-	// Ensure that roi lies in the image and is non-empty in both dimensions
-	/*if (cropX < 0) {
-		cropX = 0;
-	}
-	if (cropX >= img.cols) {
-		cropX = img.cols - 1;
-	}
-	if (cropX + cropWidth > img.cols) {
-		cropWidth = img.cols - cropX;
-	}
-	if (cropWidth <= 0) {
-		cropWidth = 1;
-	}
-	if (cropY < 0) {
-		cropY = 0;
-	}
-	if (cropY >= img.rows) {
-		cropY = img.rows - 1;
-	}
-	if (cropY + cropHeight > img.rows) {
-		cropHeight = img.rows - cropY;
-	}
-	if (cropHeight <= 0) {
-		cropHeight = 1;
-	}*/
-	assert(cropX >= 0);
-	assert((int)cropX <= img.cols - 1);
-	assert((int)(cropX + cropWidth) <= img.cols);
-	assert(cropWidth > 0);
-	assert(cropY >= 0);
-	assert((int)cropY <= img.rows - 1);
-	assert((int)(cropY + cropHeight) <= img.rows);
-	assert(cropHeight > 0);
-
-	const cv::Rect roi = cv::Rect(cropX, cropY, cropWidth, cropHeight);
-	
-	return img(roi);
+	return Pos(x, y);
 }
 
 cv::Mat
@@ -232,16 +177,4 @@ void DetectorColor::updateLimits() {
 	satMax = iHighS;
 	valMin = iLowV;
 	valMax = iHighV;
-}
-
-void DetectorColor::onTrackbarCrop(int, void * object) {
-	DetectorColor * detector = (DetectorColor*) object;
-	detector->updateCrop();
-}
-
-void DetectorColor::updateCrop() {
-	cropX = iCropX;
-	cropWidth = iCropWidth;
-	cropY = iCropY;
-	cropHeight = iCropHeight;
 }

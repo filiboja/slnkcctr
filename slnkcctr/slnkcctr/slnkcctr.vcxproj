@@ -118,6 +118,7 @@
   <ItemGroup>
     <ClInclude Include="CapMode.h" />
     <ClInclude Include="CaptureProperties.h" />
+    <ClInclude Include="CropFilter.h" />
     <ClInclude Include="DetectorColor.h" />
     <ClInclude Include="DetectorSlinky.h" />
     <ClInclude Include="FrameAnnotation.h" />
@@ -136,6 +137,7 @@
     </ClCompile>
     <ClCompile Include="CapMode.cpp" />
     <ClCompile Include="CaptureProperties.cpp" />
+    <ClCompile Include="CropFilter.cpp" />
     <ClCompile Include="DetectorColor.cpp" />
     <ClCompile Include="DetectorSlinky.cpp" />
     <ClCompile Include="FrameAnnotation.cpp" />

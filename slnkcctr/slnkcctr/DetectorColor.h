@@ -10,6 +10,8 @@
 // cv::
 #include <opencv2/core/core.hpp> // Mat, Point2i, Size
 
+#include "CropFilter.h"
+
 class DetectorColor {
 public:
 	typedef cv::Point2i Pos;
@@ -21,7 +23,8 @@ public:
 	Pos detect(const cv::Mat& imgHsv, const cv::Mat& imgBgr) const;
 private:
 	cv::Mat threshold(const cv::Mat& imgHsv) const;
-	cv::Mat crop(const cv::Mat& img) const;
+
+	CropFilter cropFilter;
 
 	std::string name;
 	cv::Size frameSize;
@@ -45,21 +48,6 @@ private:
 	int iHighV;
 	static void onTrackbarLimit(int, void * object);
 	void updateLimits();
-	
-	// Crop
-	typedef unsigned int Crop;
-	Crop cropX;
-	Crop cropWidth;
-	Crop cropY;
-	Crop cropHeight;
-
-	// For trackbars
-	int iCropX;
-	int iCropWidth;
-	int iCropY;
-	int iCropHeight;
-	static void onTrackbarCrop(int, void * object);
-	void updateCrop();
 
 	bool windowVideoShow;
 	bool windowLimitsShow;
