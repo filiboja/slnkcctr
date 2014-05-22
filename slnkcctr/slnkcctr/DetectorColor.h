@@ -12,6 +12,7 @@
 
 #include "CloseFilter.h"
 #include "CropFilter.h"
+#include "HsvFilter.h"
 #include "OpenFilter.h"
 
 class DetectorColor {
@@ -24,34 +25,13 @@ public:
 	// @param imgHsv image in HSV color space
 	Pos detect(const cv::Mat& imgHsv, const cv::Mat& imgBgr) const;
 private:
-	cv::Mat threshold(const cv::Mat& imgHsv) const;
-
 	CropFilter cropFilter;
+	HsvFilter hsvFilter;
 	OpenFilter openFilter;
 	CloseFilter closeFilter;
 
 	std::string name;
 	cv::Size frameSize;
-
-	// Limits
-	typedef unsigned int ConfigLimit;
-	typedef unsigned char Limit;
-	Limit hueMin;
-	Limit hueMax;
-	Limit satMin;
-	Limit satMax;
-	Limit valMin;
-	Limit valMax;
-
-	// For trackbars
-	int iLowH;
-	int iHighH;
-	int iLowS; 
-	int iHighS;
-	int iLowV;
-	int iHighV;
-	static void onTrackbarLimit(int, void * object);
-	void updateLimits();
 
 	bool windowVideoShow;
 	bool windowLimitsShow;
@@ -61,11 +41,4 @@ private:
 
 	void createWindowVideo() const;
 	void createWindowLimits();
-
-	static const Limit HUE_MIN = 0;
-	static const Limit HUE_MAX = 179;
-	static const Limit SAT_MIN = 0;
-	static const Limit SAT_MAX = 255;
-	static const Limit VAL_MIN = 0;
-	static const Limit VAL_MAX = 255;
 };

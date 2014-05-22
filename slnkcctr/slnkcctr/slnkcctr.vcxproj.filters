@@ -63,6 +63,9 @@
     <ClInclude Include="CloseFilter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="HsvFilter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -102,6 +105,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CloseFilter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HsvFilter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

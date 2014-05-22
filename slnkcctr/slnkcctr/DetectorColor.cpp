@@ -15,43 +15,23 @@
 
 DetectorColor::DetectorColor(const std::string& filename, const cv::Size& frameSize)
 	: frameSize(frameSize),
-	hueMin(HUE_MIN), hueMax(HUE_MAX), satMin(SAT_MIN), satMax(SAT_MAX), valMin(VAL_MIN), valMax(VAL_MAX),
 	windowVideoShow(false), windowLimitsShow(false),
 	cropFilter(CropFilter::RoiType(0, 0, frameSize.width, frameSize.height)),
+	hsvFilter(HsvFilter::BoundaryType(0, 0, 0), HsvFilter::BoundaryType(179, 255, 255)),
 	openFilter(2), // TODO: Choose a sensible value.
 	closeFilter(2) // TODO: Choose a sensible value.
 {
-	ConfigLimit configHueMin = hueMin;
-	ConfigLimit configHueMax = hueMax;
-	ConfigLimit configSatMin = satMin;
-	ConfigLimit configSatMax = satMax;
-	ConfigLimit configValMin = valMin;
-	ConfigLimit configValMax = valMax;
-
 	po::options_description options;
 	options.add_options()
 		("name", po::value<std::string>(&name))
-		("color.hue.min", po::value<ConfigLimit>(&configHueMin))
-		("color.hue.max", po::value<ConfigLimit>(&configHueMax))
-		("color.sat.min", po::value<ConfigLimit>(&configSatMin))
-		("color.sat.max", po::value<ConfigLimit>(&configSatMax))
-		("color.val.min", po::value<ConfigLimit>(&configValMin))
-		("color.val.max", po::value<ConfigLimit>(&configValMax))
 		("window.video.show", po::value<bool>(&windowVideoShow)->default_value(windowVideoShow))
 		("window.limits.show", po::value<bool>(&windowLimitsShow)->default_value(windowLimitsShow))
 	;
+	options.add(hsvFilter.options());
 	po::variables_map vm;
 	loadConfigFile(filename, options, vm);
 	po::notify(vm);
-
-	// TODO: Check for values out of bounds (crop and limits).
-
-	hueMin = configHueMin;
-	hueMax = configHueMax;
-	satMin = configSatMin;
-	satMax = configSatMax;
-	valMin = configValMin;
-	valMax = configValMax;
+	hsvFilter.notify();
 
 	if (windowVideoShow) {
 		createWindowVideo();
@@ -84,23 +64,8 @@ DetectorColor::createWindowLimits() {
 	cv::namedWindow(winname, cv::WINDOW_NORMAL);
 
 	// Create trackbars
-	const char * const winnameChar = winname.c_str();
-	
-	// Limits
-	iLowH = hueMin;
-	iHighH = hueMax;
-	iLowS = satMin;
-	iHighS = satMax;
-	iLowV = valMin;
-	iHighV = valMax;
-	cv::createTrackbar("Hue min", winnameChar, &iLowH, HUE_MAX, onTrackbarLimit, this); // Hue (0 - 179)
-	cv::createTrackbar("Hue max", winnameChar, &iHighH, HUE_MAX, onTrackbarLimit, this);
-	cv::createTrackbar("Saturation min", winnameChar, &iLowS, SAT_MAX, onTrackbarLimit, this); // Saturation (0 - 255)
-	cv::createTrackbar("Saturation max", winnameChar, &iHighS, SAT_MAX, onTrackbarLimit, this);
-	cv::createTrackbar("Value min", winnameChar, &iLowV, VAL_MAX, onTrackbarLimit, this); // Value (0 - 255)
-	cv::createTrackbar("Value max", winnameChar, &iHighV, VAL_MAX, onTrackbarLimit, this);
-
 	cropFilter.createTrackbars(winname, frameSize.width, frameSize.height);
+	hsvFilter.createTrackbars(winname);
 	openFilter.createTrackbars(winname, 5); // TODO: Choose a sensible value.
 	closeFilter.createTrackbars(winname, 5); // TODO: Choose a sensible value.
 }
@@ -110,8 +75,9 @@ DetectorColor::detect(const cv::Mat& imgHsv, const cv::Mat& imgBgr) const {
 	assert(imgHsv.channels() == 3);
 	assert(imgHsv.size() == imgBgr.size());
 
-	const cv::Mat imgCropped = cropFilter.filter(imgHsv);
-	cv::Mat imgThresholded = threshold(imgCropped);
+	cv::Mat imgCropped = cropFilter.filter(imgHsv);
+	hsvFilter.filter(imgCropped);
+	cv::Mat& imgThresholded = imgCropped;
 
 	openFilter.filter(imgThresholded);
 	closeFilter.filter(imgThresholded);
@@ -134,16 +100,6 @@ DetectorColor::detect(const cv::Mat& imgHsv, const cv::Mat& imgBgr) const {
 	return Pos(x, y);
 }
 
-cv::Mat
-DetectorColor::threshold(const cv::Mat& imgHsv) const
-{
-	const cv::Vec3b lowerb = cv::Vec3b(hueMin, satMin, valMin);
-	const cv::Vec3b upperb = cv::Vec3b(hueMax, satMax, valMax);
-	cv::Mat imgThresholded;
-	cv::inRange(imgHsv, lowerb, upperb, imgThresholded);
-	return imgThresholded;
-}
-
 std::string
 DetectorColor::windowVideoName() const {
 	return name + ".video";
@@ -152,18 +108,4 @@ DetectorColor::windowVideoName() const {
 std::string
 DetectorColor::windowLimitsName() const {
 	return name + ".limits";
-}
-
-void DetectorColor::onTrackbarLimit(int, void * object) {
-	DetectorColor * detector = (DetectorColor*) object;
-	detector->updateLimits();
-}
-
-void DetectorColor::updateLimits() {
-	hueMin = iLowH;
-	hueMax = iHighH;
-	satMin = iLowS;
-	satMax = iHighS;
-	valMin = iLowV;
-	valMax = iHighV;
 }
