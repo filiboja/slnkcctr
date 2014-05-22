@@ -17,13 +17,8 @@ public:
 	DetectorColor(const std::string& filename, const cv::Size& frameSize);
 	~DetectorColor();
 	
-	void enableWinVideo(const std::string& winname, const int& width = 640, const int& height = 480);
-	void enableWinLimits(const std::string& winname);
-
 	// @param imgHsv image in HSV color space
 	Pos detect(const cv::Mat& imgHsv, const cv::Mat& imgBgr) const;
-
-	friend bool operator<(const DetectorColor& left, const DetectorColor& right);
 private:
 	cv::Mat threshold(const cv::Mat& imgHsv) const;
 	cv::Mat crop(const cv::Mat& img) const;
