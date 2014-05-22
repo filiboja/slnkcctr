@@ -10,6 +10,7 @@
 // cv::
 #include <opencv2/core/core.hpp> // Mat, Point2i, Size
 
+#include "CloseFilter.h"
 #include "CropFilter.h"
 #include "OpenFilter.h"
 
@@ -27,6 +28,7 @@ private:
 
 	CropFilter cropFilter;
 	OpenFilter openFilter;
+	CloseFilter closeFilter;
 
 	std::string name;
 	cv::Size frameSize;
