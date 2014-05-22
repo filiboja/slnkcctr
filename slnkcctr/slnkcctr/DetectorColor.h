@@ -49,7 +49,7 @@ private:
 	int iLowV;
 	int iHighV;
 	static void onTrackbarLimit(int, void * object);
-	void updateLimit();
+	void updateLimits();
 	
 	// Crop
 	typedef unsigned int Crop;

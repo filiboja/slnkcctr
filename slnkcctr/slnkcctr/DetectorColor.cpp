@@ -222,10 +222,10 @@ DetectorColor::windowLimitsName() const {
 
 void DetectorColor::onTrackbarLimit(int, void * object) {
 	DetectorColor * detector = (DetectorColor*) object;
-	detector->updateLimit();
+	detector->updateLimits();
 }
 
-void DetectorColor::updateLimit() {
+void DetectorColor::updateLimits() {
 	hueMin = iLowH;
 	hueMax = iHighH;
 	satMin = iLowS;
