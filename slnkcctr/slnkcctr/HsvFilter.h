@@ -30,6 +30,7 @@ private:
 	static const ComponentType SAT_MAX = 255;
 	static const ComponentType VAL_MAX = 255;
 
+	// Indices in `lowerb` and `upperb`
 	enum {
 		B_HUE = 0,
 		B_SAT = 1,
