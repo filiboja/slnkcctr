@@ -10,7 +10,6 @@ OpenFilter::OpenFilter(const SizeType& size) : size(size) {}
 
 void OpenFilter::createTrackbars(const std::string& winname, const SizeType& sizeMax) {
 	tbSize = size;
-
 	cv::createTrackbar("Open size", winname, &tbSize, sizeMax, onChange, this);
 }
 
