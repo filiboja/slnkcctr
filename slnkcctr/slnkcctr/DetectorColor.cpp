@@ -76,7 +76,7 @@ DetectorColor::detect(const cv::Mat& imgHsv, const cv::Mat& imgBgr) const {
 	assert(imgHsv.size() == imgBgr.size());
 
 	cv::Mat imgCropped = cropFilter.filter(imgHsv);
-	hsvFilter.filter(imgCropped);
+	hsvFilter.filter(imgCropped); // in place
 	cv::Mat& imgThresholded = imgCropped;
 
 	openFilter.filter(imgThresholded);
