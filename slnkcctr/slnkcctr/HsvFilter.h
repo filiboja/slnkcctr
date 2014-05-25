@@ -17,7 +17,8 @@ public:
 	typedef unsigned char ComponentType;
 	typedef cv::Vec<ComponentType, 3> BoundaryType;
 
-	HsvFilter(const BoundaryType& lowerb, const BoundaryType& upperb);
+	HsvFilter(const BoundaryType& lowerb = BoundaryType(0, 0, 0),
+		const BoundaryType& upperb = BoundaryType(HUE_MAX, SAT_MAX, VAL_MAX));
 	po::options_description options();
 	void notify();
 	void createTrackbars(const std::string& winname);
