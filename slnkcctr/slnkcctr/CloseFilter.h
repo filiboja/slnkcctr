@@ -17,7 +17,7 @@ class CloseFilter {
 public:
 	typedef int SizeType;
 
-	CloseFilter(const SizeType& size);
+	CloseFilter(const SizeType& size = 1);
 	po::options_description options();
 	void notify();
 	void createTrackbars(const std::string& winname, const SizeType& sizeMax);
