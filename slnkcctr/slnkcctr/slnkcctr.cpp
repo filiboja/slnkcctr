@@ -203,7 +203,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	// Controls window
-	cv::namedWindow(controlsWinname, cv::WINDOW_AUTOSIZE);
+	cv::namedWindow(controlsWinname, cv::WINDOW_NORMAL);
 	cv::createTrackbar("Delay", controlsWinname, &delay, 1000);
 
 	// Main loop
