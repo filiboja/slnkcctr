@@ -8,6 +8,24 @@
 
 OpenFilter::OpenFilter(const SizeType& size) : size(size) {}
 
+po::options_description OpenFilter::options() {
+	// Set initial value
+	configSize = 1;
+
+	// Create options description
+	po::options_description options;
+	options.add_options()
+		("morphological.open.size", po::value<ConfigType>(&configSize))
+	;
+	return options;
+}
+
+void OpenFilter::notify() {
+	// TODO: Ensure validity.
+
+	size = configSize;
+}
+
 void OpenFilter::createTrackbars(const std::string& winname, const SizeType& sizeMax) {
 	tbSize = size;
 	cv::createTrackbar("Open size", winname, &tbSize, sizeMax, onChange, this);
