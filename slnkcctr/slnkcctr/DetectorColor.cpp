@@ -18,8 +18,8 @@ DetectorColor::DetectorColor(const std::string& filename, const cv::Size& frameS
 	windowVideoShow(false), windowLimitsShow(false),
 	cropFilter(CropFilter::RoiType(0, 0, frameSize.width, frameSize.height)),
 	hsvFilter(HsvFilter::BoundaryType(0, 0, 0), HsvFilter::BoundaryType(179, 255, 255)),
-	openFilter(2), // TODO: Choose a sensible value.
-	closeFilter(2) // TODO: Choose a sensible value.
+	openFilter(),
+	closeFilter()
 {
 	po::options_description options;
 	options.add_options()
