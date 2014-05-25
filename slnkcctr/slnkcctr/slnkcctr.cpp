@@ -78,12 +78,16 @@ int main(int argc, char *argv[]) {
 	int detectorFrameWidth = 640;
 	int detectorFrameHeight = 480;
 	bool detectorShow = true;
+	std::string detectorConfig0;
+	std::string detectorConfig1;
 
 	po::options_description optionsDetector("Detector");
 	optionsDetector.add_options()
 		("detector.width", po::value<int>(&detectorFrameWidth), "frame width (leave empty for original)")
 		("detector.height", po::value<int>(&detectorFrameHeight), "frame height (leave empty for original)")
 		("detector.show", po::value<bool>(&detectorShow)->default_value(detectorShow), "show detector video stream")
+		("detector.config.0", po::value<std::string>(&detectorConfig0), "first detector configuration file")
+		("detector.config.1", po::value<std::string>(&detectorConfig1), "second detector configuration file")
 	;
 
 	po::options_description options("Options");
@@ -188,7 +192,7 @@ int main(int argc, char *argv[]) {
 
 	// Initialize detector
 	cv::Size detectorFrameSize = cv::Size(detectorFrameWidth, detectorFrameHeight);
-	DetectorSlinky detector(detectorFrameSize);
+	DetectorSlinky detector(detectorFrameSize, detectorConfig0, detectorConfig1);
 
 	// Source window
 	if (sourceShow) {
