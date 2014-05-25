@@ -8,6 +8,7 @@
 // std::
 #include <iostream> // cout, endl
 #include <iomanip> // setiosflags, setprecision
+#include <sstream> // stringstream
 #include <string> // string
 #include <vector> // vector
 
@@ -211,6 +212,7 @@ int main(int argc, char *argv[]) {
 	bool pause = false;
 	cv::Mat frameSource;
 	clock_t clockBegin = clock();
+	double fps = 0.0;
 	while (key != KEY_ESC) {
 		if (key == KEY_PAUSE) {
 			pause = !pause;
@@ -226,6 +228,9 @@ int main(int argc, char *argv[]) {
 		if (sourceShow) {
 			cv::Mat annotationImg = cv::Mat::zeros(frameSource.size(), CV_8UC3);
 			annotation.draw(annotationImg);
+			std::stringstream text;
+			text << "FPS: " << fps;
+			cv::putText(annotationImg, text.str(), cv::Point(0, sourceFrameHeight), cv::FONT_HERSHEY_SIMPLEX, 1.0, cv::Scalar(255, 255, 255));
 			cv::Mat frameAnnotated = frameSource + annotationImg;
 			cv::imshow(sourceWinname, frameAnnotated);
 		}
@@ -233,6 +238,7 @@ int main(int argc, char *argv[]) {
 		assert(clockEnd >= clockBegin);
 		clock_t clockDiff = clockEnd - clockBegin;
 		int msecDiff = clockDiff * 1000 / CLOCKS_PER_SEC;
+		fps = 1000.0 / msecDiff;
 		int delayCur = delay - msecDiff;
 		if (delayCur <= 0) {
 			delayCur = 1;
