@@ -216,7 +216,7 @@ int main(int argc, char *argv[]) {
 			pause = !pause;
 		}
 		if (!pause) {
-			cap >> frameSource;
+			cap >> frameSource; // [FB] Blocking call: waits for new frame when camera is used.
 			if (frameSource.empty()) {
 				std::cout << "Empty source frame." << std::endl;
 				break;
