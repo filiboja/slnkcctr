@@ -10,7 +10,7 @@ CloseFilter::CloseFilter(const SizeType& size) : size(size) {}
 
 po::options_description CloseFilter::options() {
 	// Set initial value
-	configSize = 1;
+	configSize = size;
 
 	// Create options description
 	po::options_description options;
