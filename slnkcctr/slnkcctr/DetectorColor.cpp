@@ -17,7 +17,7 @@ DetectorColor::DetectorColor(const std::string& filename, const cv::Size& frameS
 	: frameSize(frameSize),
 	windowVideoShow(false), windowLimitsShow(false),
 	cropFilter(CropFilter::RoiType(0, 0, frameSize.width, frameSize.height)),
-	hsvFilter(HsvFilter::BoundaryType(0, 0, 0), HsvFilter::BoundaryType(179, 255, 255)),
+	hsvFilter(),
 	openFilter(),
 	closeFilter()
 {
