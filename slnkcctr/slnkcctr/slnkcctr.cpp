@@ -29,6 +29,7 @@ enum {
 	ERROR_UNKNOWN_OPTION = 2,
 };
 
+// Output a vector of elements of type T
 template<typename T>
 std::ostream& operator<<(std::ostream& out, const std::vector<typename T>& t);
 
@@ -244,6 +245,8 @@ int main(int argc, char *argv[]) {
 	return SUCCESS;
 }
 
+// Output elements of vector `t` into `out`
+// Break line after each output element
 template<typename T>
 std::ostream& operator<<(std::ostream& out, const std::vector<typename T>& t)
 {
