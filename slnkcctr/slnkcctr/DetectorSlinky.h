@@ -2,6 +2,9 @@
 
 #include "stdafx.h"
 
+// std::
+#include <string> // string
+
 // cv::
 #include <opencv2/core/core.hpp> // Mat
 
@@ -10,7 +13,7 @@
 
 class DetectorSlinky {
 public:
-	DetectorSlinky(const cv::Size& imgSize);
+	DetectorSlinky(const cv::Size& imgSize, const std::string& config0 = "", const std::string& config1 = "");
 	FrameAnnotation detect(const cv::Mat& img) const;
 private:
 	cv::Size imgSize;

@@ -5,9 +5,10 @@
 // cv::
 #include <opencv2/imgproc/imgproc.hpp> // cvtColor, COLOR_BGR2HSV
 
-DetectorSlinky::DetectorSlinky(const cv::Size& imgSize) : imgSize(imgSize),
-	detector0("config/magic/kinodvor0.ini", imgSize),
-	detector1("config/magic/kinodvor1.ini", imgSize)
+DetectorSlinky::DetectorSlinky(const cv::Size& imgSize, const std::string& config0, const std::string& config1)
+	: imgSize(imgSize),
+	detector0(config0, imgSize),
+	detector1(config1, imgSize)
 {}
 
 FrameAnnotation
