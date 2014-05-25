@@ -220,13 +220,9 @@ int main(int argc, char *argv[]) {
 				std::cout << "Empty source frame." << std::endl;
 				break;
 			}
-			if (sourceShow) {
-				//cv::imshow(sourceWinname, frameSource);
-			}
 		}
 		FrameAnnotation annotation = detector.detect(frameSource);
 		if (sourceShow) {
-			//cv::imshow(sourceWinname, frameSource);
 			cv::Mat annotationImg = cv::Mat::zeros(frameSource.size(), CV_8UC3);
 			annotation.draw(annotationImg);
 			cv::Mat frameAnnotated = frameSource + annotationImg;
