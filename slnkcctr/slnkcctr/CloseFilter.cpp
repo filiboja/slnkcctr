@@ -8,6 +8,24 @@
 
 CloseFilter::CloseFilter(const SizeType& size) : size(size) {}
 
+po::options_description CloseFilter::options() {
+	// Set initial value
+	configSize = 1;
+
+	// Create options description
+	po::options_description options;
+	options.add_options()
+		("morphological.close.size", po::value<ConfigType>(&configSize))
+	;
+	return options;
+}
+
+void CloseFilter::notify() {
+	// TODO: Ensure validity.
+
+	size = configSize;
+}
+
 void CloseFilter::createTrackbars(const std::string& winname, const SizeType& sizeMax) {
 	tbSize = size;
 	cv::createTrackbar("Close size", winname, &tbSize, sizeMax, onChange, this);

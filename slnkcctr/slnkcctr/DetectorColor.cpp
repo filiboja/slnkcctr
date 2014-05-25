@@ -28,10 +28,12 @@ DetectorColor::DetectorColor(const std::string& filename, const cv::Size& frameS
 		("window.limits.show", po::value<bool>(&windowLimitsShow)->default_value(windowLimitsShow))
 	;
 	options.add(hsvFilter.options());
+	options.add(closeFilter.options());
 	po::variables_map vm;
 	loadConfigFile(filename, options, vm);
 	po::notify(vm);
 	hsvFilter.notify();
+	closeFilter.notify();
 
 	if (windowVideoShow) {
 		createWindowVideo();
