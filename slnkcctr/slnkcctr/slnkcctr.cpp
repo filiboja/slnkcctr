@@ -70,7 +70,7 @@ int main(int argc, char *argv[]) {
 		("source.filename,f", po::value<std::string>(&sourceCapFilename), "source video filename (only used in file mode)")
 		("source.width", po::value<int>(&sourceFrameWidth), "frame width (leave empty for original)")
 		("source.height", po::value<int>(&sourceFrameHeight), "frame height (leave empty for original)")
-		("source.fps", po::value<double>(&sourceFps), "frames per second")
+		("source.fps", po::value<double>(&sourceFps), "frames per second (leave empty for original)")
 		("source.show", po::value<bool>(&sourceShow)->default_value(sourceShow), "show source video stream")
 	;
 
