@@ -29,22 +29,30 @@ DetectorSlinky::detect(const cv::Mat& img) const {
 
 	{ // 0
 		DetectorColor::Pos pos = detector0.detect(imgHsv, imgResized); // Detect object
+		bool valid = true;
+		if (pos.x < 0 || pos.y < 0) {
+			valid = false;
+		}
 		pos.x = (int)(pos.x * widthRatio);
 		pos.y = (int)(pos.y * heightRatio);
 		const std::string id = "slinky0";
 		const int radius = 32;
 		const FrameObject::Color color(255, 0, 0); // blue
-		FrameObject frameObject(id, pos, radius, color);
+		FrameObject frameObject(id, valid, pos, radius, color);
 		annotation.insert(frameObject);
 	}
 	{ // 1
 		DetectorColor::Pos pos = detector1.detect(imgHsv, imgResized); // Detect object
+		bool valid = true;
+		if (pos.x < 0 || pos.y < 0) {
+			valid = false;
+		}
 		pos.x = (int)(pos.x * widthRatio);
 		pos.y = (int)(pos.y * heightRatio);
 		const std::string id = "slinky1";
 		const int radius = 32;
 		const FrameObject::Color color(0, 255, 0); // green
-		FrameObject frameObject(id, pos, radius, color);
+		FrameObject frameObject(id, valid, pos, radius, color);
 		annotation.insert(frameObject);
 	}
 
