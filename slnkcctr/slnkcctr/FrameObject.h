@@ -19,6 +19,7 @@ public:
 
 	void draw(cv::Mat& img) const;
 	std::ostream& print(std::ostream& os) const; // inline
+	std::ostream& printCsv(std::ostream& os) const;
 
 	friend bool operator<(const FrameObject& left, const FrameObject& right);
 private:

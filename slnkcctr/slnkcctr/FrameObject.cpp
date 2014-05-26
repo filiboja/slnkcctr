@@ -30,6 +30,14 @@ FrameObject::print(std::ostream& os) const {
 	}
 	return os;
 }
+
+std::ostream& FrameObject::printCsv(std::ostream& os) const {
+	if (valid) {
+		os << pos.x << "," << pos.y;
+	} else {
+		return os << ",";
+	}
+	return os;
 }
 
 std::ostream&
