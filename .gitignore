@@ -4,6 +4,9 @@ Profile/
 # Input files
 video/
 
+# Output files
+slnkcctr/slnkcctr/record.csv
+
 
 ### VisualStudio.gitignore
 ### https://github.com/github/gitignore/blob/master/VisualStudio.gitignore

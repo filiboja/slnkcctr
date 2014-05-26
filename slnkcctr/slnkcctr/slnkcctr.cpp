@@ -6,6 +6,7 @@
 #include <ctime> // clock, CLOCKS_PER_SEC
 
 // std::
+#include <fstream> // ofstream
 #include <iostream> // cout, endl
 #include <iomanip> // setiosflags, setprecision
 #include <sstream> // stringstream
@@ -209,6 +210,11 @@ int main(int argc, char *argv[]) {
 	cv::namedWindow(controlsWinname, cv::WINDOW_NORMAL);
 	cv::createTrackbar("Delay", controlsWinname, &delay, 1000);
 
+	// Initialize CSV output
+	std::ofstream record;
+	record.open("record.csv", std::ios::out | std::ios::trunc);
+	record << "clock,slinky_0_x,slinky_0_y,slinky_1_x,slinky_1_y" << std::endl;
+
 	// Initialize estimator
 	BeatEstimator estimator;
 
@@ -231,6 +237,11 @@ int main(int argc, char *argv[]) {
 			}
 		}
 		FrameAnnotation annotation = detector.detect(frameSource); // Detect!
+		{ // Print CSV output
+			record << clockBegin << ",";
+			annotation.printCsv(record);
+			record << "\n";
+		}
 		{ // Estimate beat
 			const BeatEstimator::Pos& pos = annotation.get().getPos();
 			if (estimator.estimate(clockBegin, pos)) {
@@ -260,6 +271,8 @@ int main(int argc, char *argv[]) {
 		assert(delayCur > 0); // Don't wait forever
 		key = cv::waitKey(delayCur);
 	}
+
+	record.close();
 
 	return SUCCESS;
 }
