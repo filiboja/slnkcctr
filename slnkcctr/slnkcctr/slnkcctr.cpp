@@ -230,7 +230,7 @@ int main(int argc, char *argv[]) {
 				break;
 			}
 		}
-		FrameAnnotation annotation = detector.detect(frameSource);
+		FrameAnnotation annotation = detector.detect(frameSource); // Detect!
 		{ // Estimate beat
 			const BeatEstimator::Pos& pos = annotation.get().getPos();
 			if (estimator.estimate(clockBegin, pos)) {
