@@ -103,6 +103,8 @@ int main(int argc, char *argv[]) {
 	} catch (po::unknown_option& e) {
 		std::cerr << e.what() << std::endl;
 		return ERROR_UNKNOWN_OPTION;
+	} catch (po::error_with_option_name& e) {
+		std::cerr << e.what() << std::endl;
 	}
 
 	// Load options from configuration file
