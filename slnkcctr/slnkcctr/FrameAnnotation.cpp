@@ -23,6 +23,16 @@ FrameAnnotation::print(std::ostream& os) const {
 	return os;
 }
 
+std::ostream& FrameAnnotation::printCsv(std::ostream& os) const {
+	for (Objects::iterator it = objects.begin(); it != objects.end(); ++it) {
+		if (it != objects.begin()) {
+			os << ",";
+		}
+		it->printCsv(os);
+	}
+	return os;
+}
+
 const FrameObject& FrameAnnotation::get() const {
 	Objects::iterator it = objects.begin();
 	return *it;
