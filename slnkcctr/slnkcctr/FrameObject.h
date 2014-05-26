@@ -15,6 +15,8 @@ public:
 
 	FrameObject(const std::string& id, const bool valid, const Pos pos, const int radius, const Color color);
 
+	const Pos& getPos() const;
+
 	void draw(cv::Mat& img) const;
 	std::ostream& print(std::ostream& os) const; // inline
 

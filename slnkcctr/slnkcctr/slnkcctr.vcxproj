@@ -118,6 +118,7 @@
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BeatEstimator.h" />
     <ClInclude Include="CapMode.h" />
     <ClInclude Include="CaptureProperties.h" />
     <ClInclude Include="CloseFilter.h" />
@@ -133,6 +134,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BeatEstimator.cpp" />
     <ClCompile Include="C:\Program Files\gevorkyan.org\MicroProfiler\micro-profiler.initializer.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Profile|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>

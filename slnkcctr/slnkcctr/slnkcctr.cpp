@@ -17,6 +17,7 @@
 #include <opencv2/highgui/highgui.hpp> // VideoCapture, namedWindow, imshow
 #include <opencv2/imgproc/imgproc.hpp> // resize
 
+#include "BeatEstimator.h"
 #include "CapMode.h" // CapMode
 #include "CaptureProperties.h" // CaptureProperties
 #include "DetectorSlinky.h" // DetectorColor
@@ -208,6 +209,9 @@ int main(int argc, char *argv[]) {
 	cv::namedWindow(controlsWinname, cv::WINDOW_NORMAL);
 	cv::createTrackbar("Delay", controlsWinname, &delay, 1000);
 
+	// Initialize estimator
+	BeatEstimator estimator;
+
 	// Main loop
 	int key = 0;
 	assert(key != KEY_ESC);
@@ -227,6 +231,13 @@ int main(int argc, char *argv[]) {
 			}
 		}
 		FrameAnnotation annotation = detector.detect(frameSource);
+		{ // Estimate beat
+			const BeatEstimator::Pos& pos = annotation.get().getPos();
+			if (estimator.estimate(clockBegin, pos)) {
+				std::cout << ".";
+				std::cout.flush();
+			}
+		}
 		if (sourceShow) {
 			cv::Mat annotationImg = cv::Mat::zeros(frameSource.size(), CV_8UC3);
 			annotation.draw(annotationImg);

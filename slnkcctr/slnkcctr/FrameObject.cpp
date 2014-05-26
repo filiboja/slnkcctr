@@ -9,6 +9,10 @@ FrameObject::FrameObject(const std::string& id, const bool valid, const Pos pos,
 	: id(id), valid(valid), pos(pos), radius(radius), color(color)
 {}
 
+const FrameObject::Pos& FrameObject::getPos() const {
+	return pos;
+}
+
 void
 FrameObject::draw(cv::Mat& img) const {
 	if (valid) {

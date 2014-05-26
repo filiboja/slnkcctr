@@ -23,6 +23,11 @@ FrameAnnotation::print(std::ostream& os) const {
 	return os;
 }
 
+const FrameObject& FrameAnnotation::get() const {
+	Objects::iterator it = objects.begin();
+	return *it;
+}
+
 std::ostream&
 operator<<(std::ostream& os, const FrameAnnotation& obj) {
 	return obj.print(os);

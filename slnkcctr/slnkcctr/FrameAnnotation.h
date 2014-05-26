@@ -13,6 +13,7 @@ public:
 	void insert(const FrameObject& object);
 	void draw(cv::Mat& img) const;
 	std::ostream& print(std::ostream& os) const; // block
+	const FrameObject& get() const;
 private:
 	typedef std::set<FrameObject> Objects;
 	Objects objects;
