@@ -74,6 +74,7 @@ DetectorColor::createWindowLimits() {
 	closeFilter.createTrackbars(winname, 5); // TODO: Choose a sensible value.
 }
 
+// Returns `Pos(-1, -1)` if object is not detected
 DetectorColor::Pos
 DetectorColor::detect(const cv::Mat& imgHsv, const cv::Mat& imgBgr) const {
 	assert(imgHsv.channels() == 3);
@@ -87,9 +88,13 @@ DetectorColor::detect(const cv::Mat& imgHsv, const cv::Mat& imgBgr) const {
 	closeFilter.filter(imgThresholded);
 
 	cv::Moments oMoments = cv::moments(imgThresholded);
+	double area = oMoments.m00;
+	if (area < 0.5) {
+		return Pos(-1, -1);
+	}
+
 	int x = (int)(oMoments.m10 / oMoments.m00);
 	int y = (int)(oMoments.m01 / oMoments.m00);
-	// TODO: Report null instead of (0, 0) in case the object wasn't detected at all
 	
 	if (windowVideoShow) {
 		const cv::Mat imgBgrCropped = cropFilter.filter(imgBgr);
