@@ -17,7 +17,8 @@ public:
 	std::vector<FramePos> detect(const cv::Mat& img) const;
 private:
 	cv::Size imgSize;
-	
-	typedef std::vector<DetectorColor> Detectors;
-	Detectors detectors;
+
+	static const size_t DETECTORS_NUM = 2;
+
+	DetectorColor detectors[DETECTORS_NUM];
 };

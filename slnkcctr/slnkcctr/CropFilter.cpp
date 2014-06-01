@@ -2,6 +2,9 @@
 
 #include "CropFilter.h"
 
+// std::
+#include <iostream> // cerr, endl
+
 // cv::
 #include <opencv2/highgui/highgui.hpp> // createTrackbar
 
@@ -20,7 +23,11 @@ void CropFilter::createTrackbars(const std::string& winname, const CoordType& xM
 }
 
 cv::Mat CropFilter::filter(const cv::Mat& img) const {
-	return img(roi);
+	if (roi.area() > 0) {
+		return img(roi);
+	}
+	std::cerr << "Zero crop area!" << std::endl;
+	return img.clone();
 }
 
 void CropFilter::onChange(int, void * object) {

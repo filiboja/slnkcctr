@@ -20,8 +20,10 @@ class DetectorColor {
 public:
 	typedef cv::Point2i Pos;
 
-	DetectorColor(const std::string& filename, const cv::Size& frameSize);
+	DetectorColor(const std::string& filename = std::string(), const cv::Size& frameSize = cv::Size(0, 0));
 	~DetectorColor();
+
+	void init(const std::string& filename, const cv::Size& frameSize);
 	
 	// @param imgHsv image in HSV color space
 	FramePos detect(const cv::Mat& imgHsv, const cv::Mat& imgBgr) const;

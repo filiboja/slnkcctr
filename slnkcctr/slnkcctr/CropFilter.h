@@ -13,12 +13,12 @@ public:
 	typedef unsigned int CoordType;
 	typedef cv::Rect_<CoordType> RoiType;
 
-	CropFilter(const RoiType& roi);
+	CropFilter(const RoiType& roi = RoiType());
 	void createTrackbars(const std::string& winname, const CoordType& xMax, const CoordType& yMax);
 	cv::Mat filter(const cv::Mat& img) const;
-private:
-	RoiType roi;
 
+	RoiType roi;
+private:
 	// Trackbars
 	typedef int TrackbarType;
 	TrackbarType tbCropX;

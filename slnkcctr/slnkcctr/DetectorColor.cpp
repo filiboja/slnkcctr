@@ -21,21 +21,35 @@ DetectorColor::DetectorColor(const std::string& filename, const cv::Size& frameS
 	openFilter(),
 	closeFilter()
 {
-	po::options_description options;
-	options.add_options()
-		("name", po::value<std::string>(&name))
-		("window.video.show", po::value<bool>(&windowVideoShow)->default_value(windowVideoShow))
-		("window.limits.show", po::value<bool>(&windowLimitsShow)->default_value(windowLimitsShow))
-	;
-	options.add(hsvFilter.options());
-	options.add(openFilter.options());
-	options.add(closeFilter.options());
-	po::variables_map vm;
-	loadConfigFile(filename, options, vm);
-	po::notify(vm);
-	hsvFilter.notify();
-	openFilter.notify();
-	closeFilter.notify();
+	init(filename, frameSize);
+}
+
+void DetectorColor::init(const std::string& filename, const cv::Size& frameSize)
+{
+	this->frameSize = frameSize;
+
+	cropFilter.roi.x = 0;
+	cropFilter.roi.y = 0;
+	cropFilter.roi.width = frameSize.width;
+	cropFilter.roi.height = frameSize.height;
+
+	if (!filename.empty()) {
+		po::options_description options;
+		options.add_options()
+			("name", po::value<std::string>(&name))
+			("window.video.show", po::value<bool>(&windowVideoShow)->default_value(windowVideoShow))
+			("window.limits.show", po::value<bool>(&windowLimitsShow)->default_value(windowLimitsShow))
+		;
+		options.add(hsvFilter.options());
+		options.add(openFilter.options());
+		options.add(closeFilter.options());
+		po::variables_map vm;
+		loadConfigFile(filename, options, vm);
+		po::notify(vm);
+		hsvFilter.notify();
+		openFilter.notify();
+		closeFilter.notify();
+	}
 
 	if (windowVideoShow) {
 		createWindowVideo();
@@ -86,26 +100,26 @@ DetectorColor::detect(const cv::Mat& imgHsv, const cv::Mat& imgBgr) const {
 	openFilter.filter(imgThresholded);
 	closeFilter.filter(imgThresholded);
 
+	FramePos result; // Invalid unless changed
+
 	cv::Moments oMoments = cv::moments(imgThresholded);
 	double area = oMoments.m00;
-	if (area < 0.5) {
-		return FramePos(); // Invalid position
+	if (area >= 0.5) {
+		const double x = oMoments.m10 / oMoments.m00;
+		const double y = oMoments.m01 / oMoments.m00;
+		const cv::Point2d pos(x, y);
+		result = FramePos(pos); // Make result a valid position
 	}
-
-	const double x = oMoments.m10 / oMoments.m00;
-	const double y = oMoments.m01 / oMoments.m00;
-	const cv::Point2d pos(x, y);
 	
 	if (windowVideoShow) {
 		const cv::Mat imgBgrCropped = cropFilter.filter(imgBgr);
 		cv::Mat imgMasked;
 		imgBgrCropped.copyTo(imgMasked, imgThresholded); // apply mask `imgThresholded` to `imgBgr`
-		const cv::Scalar color(0, 0, 255); // red
-		cv::circle(imgMasked, pos, 4, color, 2);
+		result.draw(imgMasked);
 		cv::imshow(windowVideoName(), imgMasked);
 	}
 
-	return FramePos(pos);
+	return result;
 }
 
 std::string

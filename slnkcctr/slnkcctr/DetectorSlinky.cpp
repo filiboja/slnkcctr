@@ -8,11 +8,8 @@
 DetectorSlinky::DetectorSlinky(const cv::Size& imgSize, const std::string& config0, const std::string& config1)
 	: imgSize(imgSize)
 {
-	DetectorColor detector0(config0, imgSize);
-	DetectorColor detector1(config1, imgSize);
-	
-	detectors.push_back(detector0);
-	detectors.push_back(detector1);
+	detectors[0].init(config0, imgSize);
+	detectors[1].init(config1, imgSize);
 }
 
 std::vector<FramePos>
@@ -31,8 +28,8 @@ DetectorSlinky::detect(const cv::Mat& img) const
 	cv::cvtColor(imgResized, imgHsv, cv::COLOR_BGR2HSV);
 
 	std::vector<FramePos> result;
-	for (Detectors::const_iterator it = detectors.begin(); it != detectors.end(); ++it) {
-		FramePos pos = it->detect(imgHsv, imgResized); // Detect object
+	for (size_t i = 0; i < DETECTORS_NUM; i++) {
+		FramePos pos = detectors[i].detect(imgHsv, imgResized); // Detect object
 		pos.pos.x *= widthRatio;
 		pos.pos.y *= heightRatio;
 		result.push_back(pos);
