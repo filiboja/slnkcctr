@@ -241,7 +241,7 @@ int main(int argc, char *argv[]) {
 				break;
 			}
 		}
-		std::vector<FramePos> positions = detector.detect(frameSource); // Detect!
+		const std::vector<FramePos> positions = detector.detect(frameSource); // Detect!
 		/*{ // Print CSV output
 			record << clockBegin << ",";
 			annotation.printCsv(record);
