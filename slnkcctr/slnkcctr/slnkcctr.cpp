@@ -212,9 +212,9 @@ int main(int argc, char *argv[]) {
 	cv::createTrackbar("Delay", controlsWinname, &delay, 1000);
 
 	// Initialize CSV output
-	std::ofstream record;
+	/*std::ofstream record;
 	record.open("record.csv", std::ios::out | std::ios::trunc);
-	record << "clock,slinky_0_x,slinky_0_y,slinky_1_x,slinky_1_y" << std::endl;
+	record << "clock,slinky_0_x,slinky_0_y,slinky_1_x,slinky_1_y" << std::endl;*/
 
 	// Initialize estimator
 	BeatEstimator estimator(clock());
@@ -276,7 +276,7 @@ int main(int argc, char *argv[]) {
 		key = cv::waitKey(delayCur);
 	}
 
-	record.close();
+	//record.close();
 
 	return SUCCESS;
 }
