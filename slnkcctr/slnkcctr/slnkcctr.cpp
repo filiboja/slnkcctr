@@ -23,6 +23,7 @@
 #include "CaptureProperties.h" // CaptureProperties
 #include "DetectorSlinky.h" // DetectorColor
 #include "program_options.h" // po, loadConfigFile
+#include "SoundPlayer.h"
 
 static int delay = 50;
 
@@ -218,6 +219,8 @@ int main(int argc, char *argv[]) {
 	// Initialize estimator
 	BeatEstimator estimator;
 
+	SoundPlayer player;
+
 	// Main loop
 	int key = 0;
 	assert(key != KEY_ESC);
@@ -226,8 +229,10 @@ int main(int argc, char *argv[]) {
 	clock_t clockBegin = clock();
 	double fps = 0.0;
 	while (key != KEY_ESC) {
+		player.update();
 		if (key == KEY_PAUSE) {
 			pause = !pause;
+			player.play();
 		}
 		if (!pause) {
 			cap >> frameSource; // [FB] Blocking call: waits for new frame when camera source is used.
