@@ -106,7 +106,7 @@ void BallBeatEstimator::addMeasurement(const clock_t& clock, const FramePos& fra
 
 void BallBeatEstimator::draw(cv::Mat& img) const {
 	const int radius = 8;
-	const cv::Scalar color = cv::Scalar(0, 0, 255);
+	cv::Scalar color = cv::Scalar(0, 0, 255);
 	cv::circle(img, ballPos, radius, color, 4);
 	if (beat) {
 		cv::Rect rec(0, 0, 640, 480);
@@ -114,10 +114,25 @@ void BallBeatEstimator::draw(cv::Mat& img) const {
 		beat = false;
 	}
 
+	int thickness = 4;
+	
+	FramePos::Pos lastValidPos;
+	bool validPos = false;
+	size_t id = posHistory.size();
 	for (PosHistory::const_iterator it = posHistory.begin(); it != posHistory.end(); ++it) {
-		FramePos pos = *it;
-		pos.draw(img);
-		//cv::line(img, pos, pos, color);
-		//cv::circle(img, pos, radius, color, 4);
+		FramePos framePos = *it;
+		if (framePos.valid) {
+			FramePos::Pos thisPos = framePos.pos;
+			if (validPos) {
+				unsigned char val = id * 255 / historyCapacity;
+				color[0] = 255 - val;
+				color[2] = 255 - val;
+				cv::line(img, lastValidPos, thisPos, color, thickness);
+			} else {
+				validPos = true;
+			}
+			lastValidPos = thisPos;
+		}
+		--id;
 	}
 }
