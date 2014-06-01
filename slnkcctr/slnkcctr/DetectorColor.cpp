@@ -74,8 +74,7 @@ DetectorColor::createWindowLimits() {
 	closeFilter.createTrackbars(winname, 5); // TODO: Choose a sensible value.
 }
 
-// Returns `Pos(-1, -1)` if object is not detected
-DetectorColor::Pos
+FramePos
 DetectorColor::detect(const cv::Mat& imgHsv, const cv::Mat& imgBgr) const {
 	assert(imgHsv.channels() == 3);
 	assert(imgHsv.size() == imgBgr.size());
@@ -90,23 +89,23 @@ DetectorColor::detect(const cv::Mat& imgHsv, const cv::Mat& imgBgr) const {
 	cv::Moments oMoments = cv::moments(imgThresholded);
 	double area = oMoments.m00;
 	if (area < 0.5) {
-		return Pos(-1, -1);
+		return FramePos(); // Invalid position
 	}
 
-	int x = (int)(oMoments.m10 / oMoments.m00);
-	int y = (int)(oMoments.m01 / oMoments.m00);
+	const double x = oMoments.m10 / oMoments.m00;
+	const double y = oMoments.m01 / oMoments.m00;
+	const cv::Point2d pos(x, y);
 	
 	if (windowVideoShow) {
 		const cv::Mat imgBgrCropped = cropFilter.filter(imgBgr);
 		cv::Mat imgMasked;
 		imgBgrCropped.copyTo(imgMasked, imgThresholded); // apply mask `imgThresholded` to `imgBgr`
-		const Pos pos = Pos(x, y);
 		const cv::Scalar color(0, 0, 255); // red
 		cv::circle(imgMasked, pos, 4, color, 2);
 		cv::imshow(windowVideoName(), imgMasked);
 	}
 
-	return Pos(x, y);
+	return FramePos(pos);
 }
 
 std::string

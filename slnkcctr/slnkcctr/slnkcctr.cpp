@@ -216,7 +216,7 @@ int main(int argc, char *argv[]) {
 	record << "clock,slinky_0_x,slinky_0_y,slinky_1_x,slinky_1_y" << std::endl;
 
 	// Initialize estimator
-	BeatEstimator estimator;
+	BeatEstimator estimator(clock());
 
 	// Main loop
 	int key = 0;
@@ -236,22 +236,21 @@ int main(int argc, char *argv[]) {
 				break;
 			}
 		}
-		FrameAnnotation annotation = detector.detect(frameSource); // Detect!
-		{ // Print CSV output
+		std::vector<FramePos> positions = detector.detect(frameSource); // Detect!
+		/*{ // Print CSV output
 			record << clockBegin << ",";
 			annotation.printCsv(record);
 			record << "\n";
-		}
+		}*/
 		{ // Estimate beat
-			const BeatEstimator::Pos& pos = annotation.get().getPos();
-			if (estimator.estimate(clockBegin, pos)) {
-				std::cout << ".";
-				std::cout.flush();
-			}
+			estimator.addMeasurement(clockBegin, positions);
 		}
 		if (sourceShow) {
 			cv::Mat annotationImg = cv::Mat::zeros(frameSource.size(), CV_8UC3);
-			annotation.draw(annotationImg);
+			for (std::vector<FramePos>::const_iterator it = positions.begin(); it != positions.end(); ++it) {
+				it->draw(annotationImg);
+			}
+			estimator.draw(annotationImg);
 			std::stringstream text;
 			text << "FPS: " << fps;
 			cv::putText(annotationImg, text.str(), cv::Point(0, sourceFrameHeight), cv::FONT_HERSHEY_SIMPLEX, 1.0, cv::Scalar(255, 255, 255));

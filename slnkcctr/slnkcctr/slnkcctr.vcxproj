@@ -121,6 +121,7 @@
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BallBeatEstimator.h" />
     <ClInclude Include="BeatEstimator.h" />
     <ClInclude Include="CapMode.h" />
     <ClInclude Include="CaptureProperties.h" />
@@ -128,8 +129,7 @@
     <ClInclude Include="CropFilter.h" />
     <ClInclude Include="DetectorColor.h" />
     <ClInclude Include="DetectorSlinky.h" />
-    <ClInclude Include="FrameAnnotation.h" />
-    <ClInclude Include="FrameObject.h" />
+    <ClInclude Include="FramePos.h" />
     <ClInclude Include="HsvFilter.h" />
     <ClInclude Include="OpenFilter.h" />
     <ClInclude Include="program_options.h" />
@@ -137,6 +137,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BallBeatEstimator.cpp" />
     <ClCompile Include="BeatEstimator.cpp" />
     <ClCompile Include="C:\Program Files\gevorkyan.org\MicroProfiler\micro-profiler.initializer.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Profile|Win32'">NotUsing</PrecompiledHeader>
@@ -151,8 +152,7 @@
     <ClCompile Include="CropFilter.cpp" />
     <ClCompile Include="DetectorColor.cpp" />
     <ClCompile Include="DetectorSlinky.cpp" />
-    <ClCompile Include="FrameAnnotation.cpp" />
-    <ClCompile Include="FrameObject.cpp" />
+    <ClCompile Include="FramePos.cpp" />
     <ClCompile Include="HsvFilter.cpp" />
     <ClCompile Include="OpenFilter.cpp" />
     <ClCompile Include="program_options.cpp" />
