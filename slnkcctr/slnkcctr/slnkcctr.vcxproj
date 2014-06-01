@@ -114,11 +114,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <None Include="config\default.ini" />
+    <None Include="config\default\0.ini" />
+    <None Include="config\default\1.ini" />
     <None Include="config\magic\kinodvor0.ini" />
     <None Include="config\magic\kinodvor1.ini" />
     <None Include="config\magic\magic0.ini" />
     <None Include="config\magic\magic1.ini" />
     <None Include="ReadMe.txt" />
+    <None Include="slnkcctr.ini" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BallBeatEstimator.h" />

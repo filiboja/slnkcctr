@@ -16,20 +16,59 @@
     <Filter Include="Source Files\MicroProfiler">
       <UniqueIdentifier>{31620534-31ae-4319-9f3f-18ca2a2c5cd3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\config">
+      <UniqueIdentifier>{140ce517-013c-46a3-ba10-84caff130948}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\config\magic">
+      <UniqueIdentifier>{7b37437a-1241-4b29-9e4c-46a1f1848067}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\config\default">
+      <UniqueIdentifier>{7b074ccd-2f93-4e7b-b10f-0201809cb589}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Filter">
+      <UniqueIdentifier>{e79cbef5-abd1-411e-a8b2-1d3889463d59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Filter">
+      <UniqueIdentifier>{36885c50-7906-4c73-8875-0a323b4261b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\BeatEstimator">
+      <UniqueIdentifier>{52b786c8-5c0b-475c-b7d6-41cba6b0e8cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\BeatEstimator">
+      <UniqueIdentifier>{1f559f82-0a86-422c-9722-63a10806b677}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Detector">
+      <UniqueIdentifier>{60b30941-252b-43dc-aa5c-775d730b83fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Detector">
+      <UniqueIdentifier>{f5f500ef-0dff-4a84-b4e1-99ef4444c633}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
-    <None Include="config\magic\magic0.ini">
+    <None Include="slnkcctr.ini">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="config\magic\magic1.ini">
-      <Filter>Resource Files</Filter>
+    <None Include="config\default\0.ini">
+      <Filter>Resource Files\config\default</Filter>
+    </None>
+    <None Include="config\default\1.ini">
+      <Filter>Resource Files\config\default</Filter>
+    </None>
+    <None Include="config\default.ini">
+      <Filter>Resource Files\config</Filter>
     </None>
     <None Include="config\magic\kinodvor0.ini">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\config\magic</Filter>
     </None>
     <None Include="config\magic\kinodvor1.ini">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\config\magic</Filter>
+    </None>
+    <None Include="config\magic\magic0.ini">
+      <Filter>Resource Files\config\magic</Filter>
+    </None>
+    <None Include="config\magic\magic1.ini">
+      <Filter>Resource Files\config\magic</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -39,13 +78,7 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DetectorColor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="CaptureProperties.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DetectorSlinky.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CapMode.h">
@@ -54,29 +87,35 @@
     <ClInclude Include="program_options.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CropFilter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="OpenFilter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CloseFilter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="HsvFilter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BeatEstimator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="SoundPlayer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BallBeatEstimator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="FramePos.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CloseFilter.h">
+      <Filter>Header Files\Filter</Filter>
+    </ClInclude>
+    <ClInclude Include="CropFilter.h">
+      <Filter>Header Files\Filter</Filter>
+    </ClInclude>
+    <ClInclude Include="HsvFilter.h">
+      <Filter>Header Files\Filter</Filter>
+    </ClInclude>
+    <ClInclude Include="OpenFilter.h">
+      <Filter>Header Files\Filter</Filter>
+    </ClInclude>
+    <ClInclude Include="BeatEstimator.h">
+      <Filter>Header Files\BeatEstimator</Filter>
+    </ClInclude>
+    <ClInclude Include="BallBeatEstimator.h">
+      <Filter>Header Files\BeatEstimator</Filter>
+    </ClInclude>
+    <ClInclude Include="DetectorColor.h">
+      <Filter>Header Files\Detector</Filter>
+    </ClInclude>
+    <ClInclude Include="DetectorSlinky.h">
+      <Filter>Header Files\Detector</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -89,14 +128,8 @@
     <ClCompile Include="CaptureProperties.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DetectorColor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="C:\Program Files\gevorkyan.org\MicroProfiler\micro-profiler.initializer.cpp">
       <Filter>Source Files\MicroProfiler</Filter>
-    </ClCompile>
-    <ClCompile Include="DetectorSlinky.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CapMode.cpp">
       <Filter>Source Files</Filter>
@@ -104,29 +137,35 @@
     <ClCompile Include="program_options.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CropFilter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="OpenFilter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CloseFilter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="HsvFilter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="BeatEstimator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="SoundPlayer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="BallBeatEstimator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FramePos.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CloseFilter.cpp">
+      <Filter>Source Files\Filter</Filter>
+    </ClCompile>
+    <ClCompile Include="CropFilter.cpp">
+      <Filter>Source Files\Filter</Filter>
+    </ClCompile>
+    <ClCompile Include="OpenFilter.cpp">
+      <Filter>Source Files\Filter</Filter>
+    </ClCompile>
+    <ClCompile Include="HsvFilter.cpp">
+      <Filter>Source Files\Filter</Filter>
+    </ClCompile>
+    <ClCompile Include="BallBeatEstimator.cpp">
+      <Filter>Source Files\BeatEstimator</Filter>
+    </ClCompile>
+    <ClCompile Include="BeatEstimator.cpp">
+      <Filter>Source Files\BeatEstimator</Filter>
+    </ClCompile>
+    <ClCompile Include="DetectorColor.cpp">
+      <Filter>Source Files\Detector</Filter>
+    </ClCompile>
+    <ClCompile Include="DetectorSlinky.cpp">
+      <Filter>Source Files\Detector</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
