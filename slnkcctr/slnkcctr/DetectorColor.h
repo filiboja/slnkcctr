@@ -5,6 +5,7 @@
 #include "stdafx.h"
 
 // std::
+#include <stdexcept> // runtime_error
 #include <string> // string
 
 // cv::
@@ -22,6 +23,11 @@ public:
 
 	DetectorColor(const std::string& filename = std::string(), const cv::Size& frameSize = cv::Size(0, 0));
 	~DetectorColor();
+	DetectorColor(const DetectorColor& other)
+	{
+		// Prevent copying to keep the windows alive
+		throw std::runtime_error("DetectorColor: Copy constructor: Unsupported");
+	};
 
 	void init(const std::string& filename, const cv::Size& frameSize);
 	
