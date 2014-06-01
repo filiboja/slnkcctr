@@ -12,6 +12,7 @@
 
 #include "CloseFilter.h"
 #include "CropFilter.h"
+#include "FramePos.h"
 #include "HsvFilter.h"
 #include "OpenFilter.h"
 
@@ -23,7 +24,7 @@ public:
 	~DetectorColor();
 	
 	// @param imgHsv image in HSV color space
-	Pos detect(const cv::Mat& imgHsv, const cv::Mat& imgBgr) const;
+	FramePos detect(const cv::Mat& imgHsv, const cv::Mat& imgBgr) const;
 private:
 	CropFilter cropFilter;
 	HsvFilter hsvFilter;

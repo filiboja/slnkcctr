@@ -8,11 +8,17 @@
 // cv::
 #include <opencv2/core/core.hpp> // Point2i
 
+#include "BallBeatEstimator.h"
+#include "FramePos.h"
+
 class BeatEstimator {
 public:
 	typedef cv::Point2i Pos;
-	bool estimate(clock_t clock, Pos pos);
+
+	BeatEstimator(const clock_t& clock = clock());
+	void addMeasurement(const clock_t& clock, const std::vector<FramePos>& positions);
+	void draw(cv::Mat& img) const;
 private:
-	clock_t lastClock;
-	double ballY;
+	BallBeatEstimator estimator0;
+	BallBeatEstimator estimator1;
 };
