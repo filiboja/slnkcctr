@@ -30,4 +30,5 @@ private:
 
 	typedef std::list<FramePos> PosHistory;
 	PosHistory posHistory;
+	size_t historyCapacity;
 };

@@ -14,12 +14,13 @@
 #include "BallBeatEstimator.h"
 
 BallBeatEstimator::BallBeatEstimator(const clock_t& clock)
-	: lastClock(clock), forceFactor(10.0), ballPos(0.0, 0.0), ballVel(100.0, 0.0)
+	: lastClock(clock), forceFactor(10.0), ballPos(0.0, 0.0), ballVel(100.0, 0.0),
+	historyCapacity(30)
 {}
 
 void BallBeatEstimator::addMeasurement(const clock_t& clock, const FramePos& framePos) {
 	posHistory.push_back(framePos);
-	if (posHistory.size() > 10) {
+	if (posHistory.size() > historyCapacity) {
 		posHistory.pop_front();
 	}
 
