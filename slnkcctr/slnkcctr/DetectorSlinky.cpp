@@ -8,8 +8,8 @@
 DetectorSlinky::DetectorSlinky(const cv::Size& imgSize, const std::string& config0, const std::string& config1)
 	: imgSize(imgSize)
 {
-	detectors[0].init(config0, imgSize, DetectorColor::Color(0, 0, 255));
-	detectors[1].init(config1, imgSize, DetectorColor::Color(0, 255, 0));
+	detectors[0].init(config0, imgSize, DetectorColor::Color(0, 0, 255), true, true, "0");
+	detectors[1].init(config1, imgSize, DetectorColor::Color(0, 255, 0), true, true, "1");
 }
 
 std::vector<FramePos>

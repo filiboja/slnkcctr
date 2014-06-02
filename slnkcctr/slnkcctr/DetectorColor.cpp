@@ -24,10 +24,14 @@ DetectorColor::DetectorColor(const std::string& filename, const cv::Size& frameS
 	init(filename, frameSize);
 }
 
-void DetectorColor::init(const std::string& filename, const cv::Size& frameSize, const Color& color)
+void DetectorColor::init(const std::string& filename, const cv::Size& frameSize, const Color& color,
+	const bool& windowVideoShow, const bool& windowLimitsShow, const std::string& name)
 {
 	this->frameSize = frameSize;
 	this->color = color;
+	this->windowVideoShow = windowVideoShow;
+	this->windowLimitsShow = windowLimitsShow;
+	this->name = name;
 
 	cropFilter.roi.x = 0;
 	cropFilter.roi.y = 0;
@@ -37,9 +41,9 @@ void DetectorColor::init(const std::string& filename, const cv::Size& frameSize,
 	if (!filename.empty()) {
 		po::options_description options;
 		options.add_options()
-			("name", po::value<std::string>(&name))
-			("window.video.show", po::value<bool>(&windowVideoShow)->default_value(windowVideoShow))
-			("window.limits.show", po::value<bool>(&windowLimitsShow)->default_value(windowLimitsShow))
+			("name", po::value<std::string>(&this->name))
+			("window.video.show", po::value<bool>(&this->windowVideoShow)->default_value(this->windowVideoShow))
+			("window.limits.show", po::value<bool>(&this->windowLimitsShow)->default_value(this->windowLimitsShow))
 		;
 		options.add(hsvFilter.options());
 		options.add(openFilter.options());

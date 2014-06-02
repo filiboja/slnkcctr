@@ -36,7 +36,8 @@ public:
 		throw std::runtime_error("DetectorColor::operator=(const DetectorColor&): Unsupported");
 	};
 
-	void init(const std::string& filename, const cv::Size& frameSize, const Color& color = Color(0, 0, 255));
+	void init(const std::string& filename, const cv::Size& frameSize, const Color& color = Color(0, 0, 255),
+		const bool& windowVideoShow = false, const bool& windowLimitsShow = false, const std::string& name = std::string());
 	
 	// @param imgHsv image in HSV color space
 	FramePos detect(const cv::Mat& imgHsv, const cv::Mat& imgBgr) const;
