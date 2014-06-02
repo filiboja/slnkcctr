@@ -13,8 +13,8 @@
 
 #include "program_options.h"
 
-DetectorColor::DetectorColor(const std::string& filename, const cv::Size& frameSize)
-	: frameSize(frameSize),
+DetectorColor::DetectorColor(const std::string& filename, const cv::Size& frameSize, const Color& color)
+	: frameSize(frameSize), color(color),
 	windowVideoShow(false), windowLimitsShow(false),
 	cropFilter(CropFilter::RoiType(0, 0, frameSize.width, frameSize.height)),
 	hsvFilter(),
@@ -24,9 +24,10 @@ DetectorColor::DetectorColor(const std::string& filename, const cv::Size& frameS
 	init(filename, frameSize);
 }
 
-void DetectorColor::init(const std::string& filename, const cv::Size& frameSize)
+void DetectorColor::init(const std::string& filename, const cv::Size& frameSize, const Color& color)
 {
 	this->frameSize = frameSize;
+	this->color = color;
 
 	cropFilter.roi.x = 0;
 	cropFilter.roi.y = 0;
@@ -118,6 +119,8 @@ DetectorColor::detect(const cv::Mat& imgHsv, const cv::Mat& imgBgr) const {
 		result.draw(imgMasked);
 		cv::imshow(windowVideoName(), imgMasked);
 	}
+
+	result.color = color;
 
 	return result;
 }

@@ -20,8 +20,10 @@
 class DetectorColor {
 public:
 	typedef cv::Point2i Pos;
+	typedef cv::Scalar Color;
 
-	DetectorColor(const std::string& filename = std::string(), const cv::Size& frameSize = cv::Size(0, 0));
+	DetectorColor(const std::string& filename = std::string(), const cv::Size& frameSize = cv::Size(0, 0),
+		const Color& color = Color(0, 0, 255));
 	~DetectorColor();
 	DetectorColor(const DetectorColor& other)
 	{
@@ -29,7 +31,7 @@ public:
 		throw std::runtime_error("DetectorColor(const DetectorColor&): Unsupported");
 	};
 
-	void init(const std::string& filename, const cv::Size& frameSize);
+	void init(const std::string& filename, const cv::Size& frameSize, const Color& color = Color(0, 0, 255));
 	
 	// @param imgHsv image in HSV color space
 	FramePos detect(const cv::Mat& imgHsv, const cv::Mat& imgBgr) const;
@@ -50,4 +52,6 @@ private:
 
 	void createWindowVideo() const;
 	void createWindowLimits();
+
+	Color color;
 };
