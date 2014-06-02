@@ -35,7 +35,6 @@ void SoundPlayer::update() {
 }
 
 void SoundPlayer::play() {
-	std::cout << "beat" << std::endl;
 	sound.play();
 	clockPlay = clock();
 }
