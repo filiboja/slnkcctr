@@ -6,29 +6,25 @@
 #include <ctime> // clock_t
 
 // std::
-#include <list>
+#include <deque>
 
 // cv::
-#include <opencv2/core/core.hpp> // Point2i
+#include <opencv2/core/core.hpp> // Scalar
 
 #include "FramePos.h"
 
 class BallBeatEstimator {
 public:
-	typedef cv::Point2d Pos;
-	BallBeatEstimator(const clock_t& clock);
+	typedef cv::Scalar Color;
+
+	BallBeatEstimator(const clock_t& clock, const Color& color = Color(0, 0, 255));
 	void addMeasurement(const clock_t& clock, const FramePos& pos);
 	void draw(cv::Mat& img) const;
 private:
-	clock_t lastClock; // in clocks
-	Pos ballPos; // in pixels
-	cv::Vec2d ballVel; // in pixels per second
-	const double forceFactor;
-	Pos prevPos;
-	mutable bool beat;
-	clock_t prevBeatClock;
-
-	typedef std::list<FramePos> PosHistory;
+	typedef std::deque<FramePos> PosHistory;
 	PosHistory posHistory;
 	size_t historyCapacity;
+	Color color;
+
+	FramePos averagePos;
 };

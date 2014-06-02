@@ -11,6 +11,7 @@
 class FramePos {
 public:
 	typedef cv::Point2d Pos;
+	typedef cv::Scalar Color;
 
 	FramePos(); // Invalid position
 	FramePos(const Pos& pos);
@@ -20,11 +21,12 @@ public:
 
 	void draw(cv::Mat& img) const;
 
+	// Factual
 	bool valid;
 	Pos pos;
-private:
-	cv::Scalar color;
 
-	static const int radius = 16;
-	static const int thickness = 4;
+	// Cosmetic
+	Color color;
+	int radius;
+	int thickness;
 };

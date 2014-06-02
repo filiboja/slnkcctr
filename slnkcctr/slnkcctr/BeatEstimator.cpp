@@ -17,7 +17,7 @@
 }*/
 
 BeatEstimator::BeatEstimator(const clock_t& clock)
-	: estimator0(clock), estimator1(clock)
+	: estimator0(clock, BallBeatEstimator::Color(0, 0, 255)), estimator1(clock, BallBeatEstimator::Color(0, 255, 0))
 {}
 
 void BeatEstimator::addMeasurement(const clock_t& clock, const std::vector<FramePos>& positions) {

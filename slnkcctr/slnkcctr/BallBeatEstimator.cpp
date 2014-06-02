@@ -13,126 +13,71 @@
 
 #include "BallBeatEstimator.h"
 
-BallBeatEstimator::BallBeatEstimator(const clock_t& clock)
-	: lastClock(clock), forceFactor(10.0), ballPos(0.0, 0.0), ballVel(100.0, 0.0),
-	historyCapacity(30)
-{}
+BallBeatEstimator::BallBeatEstimator(const clock_t& clock, const Color& color)
+	: historyCapacity(30), color(color)
+{
+	averagePos.color = color;
+	averagePos.radius = 8;
+	averagePos.thickness = 4;
+}
 
 void BallBeatEstimator::addMeasurement(const clock_t& clock, const FramePos& framePos) {
-	posHistory.push_back(framePos);
+	posHistory.push_front(framePos);
 	if (posHistory.size() > historyCapacity) {
-		posHistory.pop_front();
+		posHistory.pop_back();
 	}
 
-	const Pos& pos = framePos.pos;
-
-	if (pos.x < 0 || pos.y < 0) {
-		// Invalid position
-		return;
+	averagePos.valid = false;
+	averagePos.pos = FramePos::Pos(0.0, 0.0);
+	size_t count = 0;
+	size_t num = 3;
+	size_t id = 0;
+	for (PosHistory::const_iterator it = posHistory.begin(); it != posHistory.end(); ++it) {
+		const FramePos& framePos = *it;
+		if (framePos.valid) {
+			averagePos.pos += framePos.pos;
+			++count;
+		}
+		++id;
+		if (id >= num) {
+			break;
+		}
 	}
-
-	// Manage time
-	assert(clock >= lastClock);
-	clock_t clockDiff = clock - lastClock;
-	lastClock = clock;
-	double timeDiff = (double)clockDiff / CLOCKS_PER_SEC; // in seconds
-
-	cv::Vec2d posDiff = pos - prevPos;
-	double posDiffNorm = cv::norm(posDiff);
-	prevPos = pos;
-
-	/*if (posDiffNorm / timeDiff > 1000.0) {
-		// Too large change; discard.
-		return;
-	}*/
-
-	assert(clock >= prevBeatClock);
-	double maxBps = 3;
-	if (clock - prevBeatClock < (double)CLOCKS_PER_SEC / maxBps) {
-		// Too short time from previous beat
-		return;
+	if (count >= 2) {
+		averagePos.pos *= 1.0 / count;
+		averagePos.valid = true;
 	}
-	//std::cout << "?";
-	//std::cout.flush();
-
-	if (pos.y >= prevPos.y) {
-		// Not falling
-		return;
-	}
-	//std::cout << "!";
-	//std::cout.flush();
-
-	if (timeDiff > 1.0 / 10.0) {
-		// Too long time from previous valid measurement
-		return;
-	}
-
-	if (posDiffNorm / timeDiff > 100.0) {
-		std::cout << ".";
-		std::cout.flush();
-		prevBeatClock = clock;
-		beat = true;
-	}
-
-	ballPos = pos;
-
-	/*
-	// Calculate forces
-	cv::Vec2d posDiff = pos - ballPos;
-	double diffNorm = cv::norm(posDiff);
-	cv::Vec2d diffNormalized = posDiff * (1.0 / diffNorm);
-	if (diffNorm <= 0) {
-		return;
-	}
-
-	double springTolerance = 50.0;
-	double springFactor = 1.0;
-	if (diffNorm > springTolerance) {
-		springFactor = pow(0.5, diffNorm - springTolerance);
-	}
-	cv::Vec2d forceSpring = 1000.0 * posDiff * springFactor;
-
-	cv::Vec2d forceAir = 100.0 * -ballVel * cv::norm(ballVel);
-
-	cv::Vec2d force = forceSpring + forceAir;
-
-	// Apply force
-	ballVel += force * timeDiff;
-
-	// Apply velocity
-	ballPos += cv::Point2d(ballVel * timeDiff);
-	*/
 }
 
 void BallBeatEstimator::draw(cv::Mat& img) const {
-	const int radius = 8;
-	cv::Scalar color = cv::Scalar(0, 0, 255);
-	cv::circle(img, ballPos, radius, color, 4);
-	if (beat) {
+	/*if (beat) {
 		cv::Rect rec(0, 0, 640, 480);
 		cv::rectangle(img, rec, color, 16);
 		beat = false;
-	}
+	}*/
+
+	averagePos.draw(img);
 
 	int thickness = 4;
 	
 	FramePos::Pos lastValidPos;
 	bool validPos = false;
-	size_t id = posHistory.size();
+	size_t id = 0;
 	for (PosHistory::const_iterator it = posHistory.begin(); it != posHistory.end(); ++it) {
 		FramePos framePos = *it;
 		if (framePos.valid) {
 			FramePos::Pos thisPos = framePos.pos;
 			if (validPos) {
-				unsigned char val = id * 255 / historyCapacity;
-				color[0] = 255 - val;
-				color[2] = 255 - val;
-				cv::line(img, lastValidPos, thisPos, color, thickness);
+				double weight = 1.0 - ((double)id / historyCapacity);
+				assert(weight >= 0.0);
+				assert(weight <= 1.0);
+				Color colorCur = color * weight;
+				cv::line(img, lastValidPos, thisPos, colorCur, thickness);
 			} else {
 				validPos = true;
 			}
 			lastValidPos = thisPos;
 		}
-		--id;
+		++id;
 	}
 }
