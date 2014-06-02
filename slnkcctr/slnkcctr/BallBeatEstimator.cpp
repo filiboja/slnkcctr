@@ -82,7 +82,7 @@ void BallBeatEstimator::addMeasurement(const clock_t& clock, const FramePos& fra
 		}
 		break;
 	}
-	if (sinceBeat < 6) {
+	if (sinceBeat < 12) {
 		beat = false;
 	}
 	if (beat) {
