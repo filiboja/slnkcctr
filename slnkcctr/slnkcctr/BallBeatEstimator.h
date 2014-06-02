@@ -24,7 +24,16 @@ private:
 	typedef std::deque<FramePos> PosHistory;
 	PosHistory posHistory;
 	size_t historyCapacity;
-	Color color;
+	mutable Color color;
 
 	FramePos averagePos;
+
+	enum Phase {
+		ASCENT,
+		DESCENT
+	};
+	Phase phase;
+
+	mutable bool beat;
+	unsigned int sinceBeat;
 };
