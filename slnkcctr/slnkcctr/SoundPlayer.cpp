@@ -5,7 +5,9 @@
 // std::
 #include <iostream> // cerr, cout, endl
 
-SoundPlayer::SoundPlayer(const double& frequency) {
+SoundPlayer::SoundPlayer(const double& frequency, const double& length)
+	: length(length)
+{
 	const unsigned SAMPLES = 44100;
     const unsigned SAMPLE_RATE = 44100;
     const unsigned AMPLITUDE = 30000;
@@ -29,7 +31,7 @@ SoundPlayer::SoundPlayer(const double& frequency) {
 }
 
 void SoundPlayer::update() {
-	if (clock() - clockPlay > (double)CLOCKS_PER_SEC / 8) {
+	if (clock() - clockPlay > CLOCKS_PER_SEC * length) {
 		sound.pause();
 	}
 }
