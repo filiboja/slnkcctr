@@ -10,7 +10,7 @@
 
 class SoundPlayer {
 public:
-	SoundPlayer();
+	SoundPlayer(const double& frequency = 440);
 	void update();
 	void play();
 
