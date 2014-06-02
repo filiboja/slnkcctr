@@ -21,7 +21,7 @@ DetectorColor::DetectorColor(const std::string& filename, const cv::Size& frameS
 	openFilter(),
 	closeFilter()
 {
-	init(filename, frameSize);
+	init(filename, frameSize, color, windowVideoShow, windowLimitsShow);
 }
 
 void DetectorColor::init(const std::string& filename, const cv::Size& frameSize, const Color& color,
@@ -56,10 +56,10 @@ void DetectorColor::init(const std::string& filename, const cv::Size& frameSize,
 		closeFilter.notify();
 	}
 
-	if (windowVideoShow) {
+	if (this->windowVideoShow) {
 		createWindowVideo();
 	}
-	if (windowLimitsShow) {
+	if (this->windowLimitsShow) {
 		createWindowLimits();
 	}
 }
