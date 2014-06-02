@@ -11,12 +11,10 @@
 class SoundPlayer {
 public:
 	SoundPlayer(const double& frequency = 440, const double& length = 0.25);
-	void update();
 	void play();
 
 private:
 	sf::Sound sound;
 	sf::SoundBuffer buffer;
 	clock_t clockPlay;
-	const double length;
 };

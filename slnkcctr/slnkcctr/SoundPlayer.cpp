@@ -6,13 +6,12 @@
 #include <iostream> // cerr, cout, endl
 
 SoundPlayer::SoundPlayer(const double& frequency, const double& length)
-	: length(length)
 {
-	const unsigned SAMPLES = 44100;
-    const unsigned SAMPLE_RATE = 44100;
+	const unsigned SAMPLE_RATE = 44100;
+	const unsigned SAMPLES = unsigned(SAMPLE_RATE * length);
     const unsigned AMPLITUDE = 30000;
 
-    sf::Int16 raw[SAMPLES];
+    sf::Int16 * raw = new sf::Int16[SAMPLES];
 
     const double TWO_PI = 6.28318;
     const double increment = frequency / 44100;
@@ -26,14 +25,10 @@ SoundPlayer::SoundPlayer(const double& frequency, const double& length)
         std::cerr << "Loading failed!" << std::endl;
     }
 
-    sound.setBuffer(buffer);
-    sound.setLoop(true);
-}
+	delete[] raw;
 
-void SoundPlayer::update() {
-	if (clock() - clockPlay > CLOCKS_PER_SEC * length) {
-		sound.pause();
-	}
+    sound.setBuffer(buffer);
+    sound.setLoop(false);
 }
 
 void SoundPlayer::play() {

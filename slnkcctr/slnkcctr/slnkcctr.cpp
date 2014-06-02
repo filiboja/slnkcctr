@@ -229,7 +229,6 @@ int main(int argc, char *argv[]) {
 	clock_t clockBegin = clock();
 	double fps = 0.0;
 	while (key != KEY_ESC) {
-		player.update();
 		if (key == KEY_PAUSE) {
 			pause = !pause;
 			player.play();

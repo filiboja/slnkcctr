@@ -22,7 +22,6 @@ BallBeatEstimator::BallBeatEstimator(const clock_t& clock, const Color& color)
 }
 
 void BallBeatEstimator::addMeasurement(const clock_t& clock, const FramePos& framePos) {
-	soundPlayer.update();
 	posHistory.push_front(framePos);
 	if (posHistory.size() > historyCapacity) {
 		posHistory.pop_back();
