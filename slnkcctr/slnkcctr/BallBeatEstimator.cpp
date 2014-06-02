@@ -22,6 +22,7 @@ BallBeatEstimator::BallBeatEstimator(const clock_t& clock, const Color& color)
 }
 
 void BallBeatEstimator::addMeasurement(const clock_t& clock, const FramePos& framePos) {
+	soundPlayer.update();
 	posHistory.push_front(framePos);
 	if (posHistory.size() > historyCapacity) {
 		posHistory.pop_back();
@@ -97,6 +98,7 @@ void BallBeatEstimator::draw(cv::Mat& img) const {
 		cv::Rect rec(0, 0, img.size().width, img.size().height);
 		cv::rectangle(img, rec, color, 16);
 		beat = false;
+		soundPlayer.play();
 	}
 
 	switch (phase) {

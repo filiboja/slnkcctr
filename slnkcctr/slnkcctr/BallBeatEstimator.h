@@ -12,6 +12,7 @@
 #include <opencv2/core/core.hpp> // Scalar
 
 #include "FramePos.h"
+#include "SoundPlayer.h"
 
 class BallBeatEstimator {
 public:
@@ -36,4 +37,6 @@ private:
 
 	mutable bool beat;
 	unsigned int sinceBeat;
+
+	mutable SoundPlayer soundPlayer;
 };
