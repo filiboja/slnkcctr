@@ -62,8 +62,9 @@ void BallBeatEstimator::draw(cv::Mat& img) const {
 	
 	FramePos::Pos lastValidPos;
 	bool validPos = false;
-	size_t id = 0;
-	for (PosHistory::const_iterator it = posHistory.begin(); it != posHistory.end(); ++it) {
+	size_t id = posHistory.size() - 1;
+	for (PosHistory::const_reverse_iterator it = posHistory.rbegin(); it != posHistory.rend(); ++it) {
+		assert(id >= 0);
 		FramePos framePos = *it;
 		if (framePos.valid) {
 			FramePos::Pos thisPos = framePos.pos;
@@ -78,6 +79,6 @@ void BallBeatEstimator::draw(cv::Mat& img) const {
 			}
 			lastValidPos = thisPos;
 		}
-		++id;
+		--id;
 	}
 }
