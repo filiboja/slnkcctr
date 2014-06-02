@@ -18,7 +18,7 @@ class BallBeatEstimator {
 public:
 	typedef cv::Scalar Color;
 
-	BallBeatEstimator(const clock_t& clock, const Color& color = Color(0, 0, 255));
+	BallBeatEstimator(const clock_t& clock, const Color& color = Color(0, 0, 255), const double& frequency = 440.0);
 	void addMeasurement(const clock_t& clock, const FramePos& pos);
 	void draw(cv::Mat& img) const;
 private:

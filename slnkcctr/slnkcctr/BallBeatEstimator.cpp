@@ -13,8 +13,8 @@
 
 #include "BallBeatEstimator.h"
 
-BallBeatEstimator::BallBeatEstimator(const clock_t& clock, const Color& color)
-	: historyCapacity(30), color(color), beat(false), phase(ASCENT), sinceBeat(100)
+BallBeatEstimator::BallBeatEstimator(const clock_t& clock, const Color& color, const double& frequency)
+	: historyCapacity(30), color(color), beat(false), phase(ASCENT), sinceBeat(100), soundPlayer(frequency, 0.25)
 {
 	averagePos.color = color;
 	averagePos.radius = 8;
