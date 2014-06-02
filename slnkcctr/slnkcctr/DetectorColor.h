@@ -31,6 +31,11 @@ public:
 		throw std::runtime_error("DetectorColor(const DetectorColor&): Unsupported");
 	};
 
+	DetectorColor& operator=(const DetectorColor& other) {
+		// Prevent copying to keep the windows alive
+		throw std::runtime_error("DetectorColor::operator=(const DetectorColor&): Unsupported");
+	};
+
 	void init(const std::string& filename, const cv::Size& frameSize, const Color& color = Color(0, 0, 255));
 	
 	// @param imgHsv image in HSV color space
