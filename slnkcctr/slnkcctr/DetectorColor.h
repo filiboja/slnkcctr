@@ -26,7 +26,7 @@ public:
 	DetectorColor(const DetectorColor& other)
 	{
 		// Prevent copying to keep the windows alive
-		throw std::runtime_error("DetectorColor: Copy constructor: Unsupported");
+		throw std::runtime_error("DetectorColor(const DetectorColor&): Unsupported");
 	};
 
 	void init(const std::string& filename, const cv::Size& frameSize);
