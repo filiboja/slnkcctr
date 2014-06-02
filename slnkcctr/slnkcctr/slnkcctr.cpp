@@ -209,7 +209,7 @@ int main(int argc, char *argv[]) {
 
 	// Controls window
 	cv::namedWindow(controlsWinname, cv::WINDOW_NORMAL);
-	cv::createTrackbar("Delay", controlsWinname, &delay, 1000);
+	cv::createTrackbar("Delay", controlsWinname, &delay, 3000);
 
 	// Initialize CSV output
 	/*std::ofstream record;
