@@ -45,7 +45,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="ReadMe.txt" />
     <None Include="slnkcctr.ini">
       <Filter>Resource Files</Filter>
     </None>

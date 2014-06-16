@@ -121,7 +121,6 @@
     <None Include="config\magic\kinodvor1.ini" />
     <None Include="config\magic\magic0.ini" />
     <None Include="config\magic\magic1.ini" />
-    <None Include="ReadMe.txt" />
     <None Include="slnkcctr.ini" />
   </ItemGroup>
   <ItemGroup>
