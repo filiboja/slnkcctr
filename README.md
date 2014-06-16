@@ -1,43 +1,40 @@
-slnkcctr
-========
+# slnkcctr
 
 slnkcctr [slinky conductor] is a music toy that helps slinky jugglers to extend their performance with music.
 
 In the current version, slnkcctr uses a camera connected to a computer to recognize position of slinky
 and play simple sounds to the rhythm of slinky juggling steps.
 
-Setup
------
+## Setup
 
 To build Release or Debug configuration of slnkcctr from source code, you need the following:
 
 * Microsoft Visual C++ 2010
 * [Boost](http://www.boost.org/)
     * Version: 1.55.0
-    * Define BOOST_ROOT environment variable, e.g. "C:\local\boost_1_55_0"
+    * Define `BOOST_ROOT` environment variable, e.g. "C:\local\boost_1_55_0"
 	* Tutorial: [Getting Started on Windows](http://www.boost.org/doc/libs/1_55_0/more/getting_started/windows.html)
 * [OpenCV](http://opencv.org/)
     * Version: 2.4.9
-    * Define OPENCV_DIR environment variable, e.g. "C:\opencv\build\x86\vc10"
-	* Add "%OPENCV_DIR%\bin" to system PATH variable
+    * Define `OPENCV_DIR` environment variable, e.g. "C:\opencv\build\x86\vc10"
+	* Add `%OPENCV_DIR%\bin` to system `PATH` variable
 	* Tutorial: [Installation in Windows](http://docs.opencv.org/doc/tutorials/introduction/windows_install/windows_install.html#set-the-opencv-enviroment-variable-and-add-it-to-the-systems-path)
 * SFML
-    * Define SFML environment variable, e.g. "C:\local\SFML-2.1"
-	* Add "%SFML%\bin" to system PATH variable
+    * Define `SFML` environment variable, e.g. "C:\local\SFML-2.1"
+	* Add `%SFML%\bin` to system `PATH` variable
 
 To build Profile configuration (only useful for profiling), you further need:
 
 * [MicroProfiler](https://code.google.com/p/micro-profiler/)
     * Version: 1.1.567
-    * Define MICROPROFILER_DIR environment variable, e.g. "C:\Program Files\gevorkyan.org\MicroProfiler"
-	* Add %MICROPROFILER_DIR% to system PATH variable
+    * Define `MICROPROFILER_DIR` environment variable, e.g. "C:\Program Files\gevorkyan.org\MicroProfiler"
+    * Add `%MICROPROFILER_DIR%` to system `PATH` variable
 
 After setting up all necessary libraries, proceed to build the application in Microsoft Visual C++.
 
 Main Visual Studio project file: "slnkcctr.vcxproj"
 
-Usage
------
+## Usage
 
 Once you have built "slnkcctr.exe", you can proceed to use it.
 
@@ -49,8 +46,7 @@ You can find detailed overviews of command line options and configuration files
 in the sections "Command line options", "General configuration files"
 and "Detector configuration files".
 
-Calibration
------------
+### Calibration
 
 To calibrate the slinky end detectors, run "slnkcctr.exe".
 For each of the two slinky end detectors (called "0" and "1" by default),
@@ -88,9 +84,9 @@ If you want to preserve the parameters for future usage,
 record them in configuration files.
 See details in section "Detector configuration files".
 
-Command line options
---------------------
+### Command line options
 
+```
 --config.filename <filename>
 --config.filename "config.ini"
   Load the specified configuration file.
@@ -138,9 +134,9 @@ Command line options
   Slinky end detectors may be configured using special detector configuration files (see details below).
   Use these options to set these configuration files.
   Note that only two files are supported (one for each of the two ends of the slinky).
+```
 
-General configuration files
----------------------------
+### General configuration files
 
 Unless another configuration file is specified using the command line option "config.filename",
 slnkcctr tries to load the default configuration file "slnkcctr.ini".
@@ -148,19 +144,21 @@ slnkcctr tries to load the default configuration file "slnkcctr.ini".
 General configuration files follow the INI configuration file convention,
 i.e. you can set variable <variable> to value <value> by adding the following line to the configuration file:
 
+```
 <variable>=<value>
+```
 
 Configuration variable names match the command line option names without the leading "--".
 
 An example configuration file is attached in "slnkcctr.ini".
 
-Detector configuration files
-----------------------------
+### Detector configuration files
 
 Detector configuration files also follow INI convention,
 but have different variables available for configuration.
 These variables parametrize the behavior of the detector.
 
+```
 name=<name>
 name=slinky.red
   Name of the detector used to differentiate the two detectors in GUI.
@@ -194,3 +192,4 @@ morphological.close.size=<close size>
 morphological.open.size=1
 morphological.close.size=1
   Parameters of the morphological operations used to clean up the area filtered by color filter.
+```
