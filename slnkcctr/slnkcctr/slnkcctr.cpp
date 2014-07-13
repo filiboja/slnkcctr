@@ -67,6 +67,7 @@ int main(int argc, char *argv[]) {
 	int sourceFrameHeight = 480;
 	double sourceFps = defaultSourceFps;
 	bool sourceShow = true;
+	bool sourceShowFps = true;
 
 	po::options_description optionsSource("Source");
 	optionsSource.add_options()
@@ -77,6 +78,7 @@ int main(int argc, char *argv[]) {
 		("source.height", po::value<int>(&sourceFrameHeight), "frame height (leave empty for original)")
 		("source.fps", po::value<double>(&sourceFps), "frames per second (leave empty for original)")
 		("source.show", po::value<bool>(&sourceShow)->default_value(sourceShow), "show source video stream")
+		("source.show.fps", po::value<bool>(&sourceShowFps)->default_value(sourceShowFps), "show current FPS")
 	;
 
 	// Detector options
@@ -253,9 +255,11 @@ int main(int argc, char *argv[]) {
 				it->draw(annotationImg);
 			}
 			estimator.draw(annotationImg);
-			//std::stringstream text;
-			//text << "FPS: " << fps;
-			//cv::putText(annotationImg, text.str(), cv::Point(0, sourceFrameHeight), cv::FONT_HERSHEY_SIMPLEX, 1.0, cv::Scalar(255, 255, 255));
+			if (sourceShowFps) {
+				std::stringstream text;
+				text << "FPS: " << fps;
+				cv::putText(annotationImg, text.str(), cv::Point(0, sourceFrameHeight), cv::FONT_HERSHEY_SIMPLEX, 1.0, cv::Scalar(255, 255, 255));
+			}
 			cv::Mat frameAnnotated = frameSource + annotationImg;
 			cv::imshow(sourceWinname, frameAnnotated);
 		}
