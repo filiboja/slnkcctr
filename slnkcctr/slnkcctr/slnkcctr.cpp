@@ -253,9 +253,9 @@ int main(int argc, char *argv[]) {
 				it->draw(annotationImg);
 			}
 			estimator.draw(annotationImg);
-			std::stringstream text;
-			text << "FPS: " << fps;
-			cv::putText(annotationImg, text.str(), cv::Point(0, sourceFrameHeight), cv::FONT_HERSHEY_SIMPLEX, 1.0, cv::Scalar(255, 255, 255));
+			//std::stringstream text;
+			//text << "FPS: " << fps;
+			//cv::putText(annotationImg, text.str(), cv::Point(0, sourceFrameHeight), cv::FONT_HERSHEY_SIMPLEX, 1.0, cv::Scalar(255, 255, 255));
 			cv::Mat frameAnnotated = frameSource + annotationImg;
 			cv::imshow(sourceWinname, frameAnnotated);
 		}
