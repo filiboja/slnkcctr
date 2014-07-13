@@ -109,7 +109,7 @@ DetectorColor::detect(const cv::Mat& imgHsv, const cv::Mat& imgBgr) const {
 
 	cv::Moments oMoments = cv::moments(imgThresholded);
 	double area = oMoments.m00;
-	if (area >= 0.5) {
+	if (area >= 10000.0) {
 		const double x = oMoments.m10 / oMoments.m00;
 		const double y = oMoments.m01 / oMoments.m00;
 		const cv::Point2d pos(x, y);
