@@ -5,6 +5,8 @@ slnkcctr [slinky conductor] is a music toy that helps slinky jugglers to extend 
 In the current version, slnkcctr uses a camera connected to a computer to recognize position of slinky
 and play simple sounds to the rhythm of slinky juggling steps.
 
+Demonstration video: https://www.youtube.com/watch?v=QcneJYjU32M
+
 ## Setup
 
 To build Release or Debug configuration of slnkcctr from source code, you need the following:
