@@ -1,0 +1,219 @@
+% Authors:
+% [FB] Filip Bartek
+% [BT] Bojana Todorović
+
+% Deadline: Monday 2014-06-16 23:55
+
+% Course page (Ucilnica):
+% https://ucilnica.fri.uni-lj.si/course/view.php?id=258
+
+% Submission form (Ucilnica):
+% https://ucilnica.fri.uni-lj.si/mod/assign/view.php?id=28803
+
+% Article format:
+% EAI Endorsed Transactions on Creative Technologies
+% http://eai.eu/transaction/creative-technologies
+% Short papers: typically 5 (+/- 2) pages (brave new ideas, artistic installations with technological content, technical creative demonstrators).
+
+% LaTeX template:
+% ICST Transactions
+% http://doc.eai.eu/publications/transactions/latex/
+
+% Help with writing:
+% Writing your article
+% http://journalauthors.tandf.co.uk/preparation/writing.asp
+
+% [FB] If you get `pdfTeX error (ext4)`, add `draft` option temporarily.
+\documentclass[fonts]{icst}
+%\documentclass[fonts,draft]{icst}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+
+\usepackage{csquotes}
+\usepackage[official]{eurosym}
+\usepackage{graphicx}
+\usepackage{rotating}
+\usepackage{tabularx}
+
+\bibliographystyle{icstnum}
+
+\newcommand{\slinkyconductor}{\emph{Slinky conductor}}
+\newcommand{\slnkcctr}{\texttt{slnkcctr}}
+
+% http://stackoverflow.com/a/2739710
+% http://ctan.mirrorcatalogs.com/macros/latex/contrib/pdfpages/pdfpages.pdf
+%\usepackage{pdfpages}
+
+% [FB] `hyperref` should be the last `usepackage` in preamble
+% [FB] Watch out: may cause trouble when citation overflows a page.
+\usepackage[breaklinks,colorlinks,bookmarksopen,bookmarksnumbered,linkcolor=ICSTblue,citecolor=ICSTblue,urlcolor=ICSTblue]{hyperref}
+
+% http://ctan.mirrorcatalogs.com/macros/latex/contrib/breakurl/breakurl.pdf
+% At the preamble, just put \usepackage{breakurl} somewhere after
+% \usepackage{hyperref}.
+\usepackage{breakurl}
+
+% http://en.wikibooks.org/wiki/LaTeX/Glossary
+% Any links in resulting glossary will not be "clickable" unless you load the glossaries package after the hyperref package.
+% Every time the glossary changes, run `makeglossaries report` in this
+% folder.
+% http://tex.stackexchange.com/a/46732
+\usepackage{glossaries}
+\newacronym{ide}{IDE}{integrated development environment}
+\newacronym{sfml}{SFML}{Simple and Fast Multimedia Library}
+\newacronym{gui}{GUI}{graphical user interface}
+\newacronym{api}{API}{application programming interface}
+\makeglossaries
+
+\begin{document}
+
+\runningheads {F.~Bártek, B.~Todorović}{Slinky conductor}
+\title{Slinky conductor: project report}
+\author{Filip Bártek, Bojana Todorović}
+
+\abstract{
+This paper introduces the music toy \slinkyconductor{}
+and summarizes the development process of a prototype of the toy.
+}
+
+\keywords{Slinky, juggling, music, toy, software}
+
+\maketitle
+
+\section{Introduction}
+\input{tex/introduction} % text
+
+\section{Project design}
+
+\input{tex/designintro} % text
+
+\subsection{Mind map}
+
+Appendix \ref{app:mindmap} shows project mind map
+created in the initial phase of development.
+
+\subsection{Prototype simplification}
+
+We haven't managed to implement
+the full proposed functionality\cite{bartek:proposal}
+in the prototype presented in this text.
+The prototype we have delivered
+is able to track the position of a slinky,
+determine the approximate timing of slinky steps and
+play back simple sounds at the estimated step times.
+
+\section{Implementation}
+
+The operating system Windows was chosen as the target platform
+because it's the common platform of the development team.
+
+All the external system components
+(see listing in table \ref{tab:systemcomponents})
+we used are multi-platform,
+so building the software on other platforms remains possible.
+
+Our concern about the performance of real-time slinky tracking process
+governed several decisions we made regarding the implementation.
+
+Firstly, we chose to use OpenCV, a computer vision library,
+to support visual detection of slinky.
+OpenCV is widely used\cite{opencv:about}
+and supports many efficient image processing functions
+we could use to improve the detection process.
+
+Secondly,
+we chose to use C++ as the project's main programming language.
+C++ is the main programming language used in OpenCV
+and thus we expected the C++ OpenCV \acrshort{api}
+to be the most complete and optimized.
+
+\input{tex/externaltools} % subsection
+
+\input{tex/architecture} % subsection
+
+\input{tex/slinkyenddetector} % subsection
+
+\input{tex/beatdetector} % subsection
+
+\subsection{Sound player}
+% Bojana
+
+For sound playback \slnkcctr{} uses \acrfull{sfml}.
+
+In \slnkcctr{} we used \acrshort{sfml}'s \emph{system module},
+which manages the clock and threads,
+and \emph{audio module},
+which provides an interface to handle sounds and music.
+
+In \slnkcctr{} we implemented a simple beep sound that responds to slinky movement.
+The beep sound is a pure sound (i.e.~sine wave) of fixed frequency.
+
+We used two sounds of frequencies 440 and 220 Hz
+(to differentiate the slinky ends) and length 0.25 s each.
+It is possible to change the frequency, amplitude and length
+of the sounds in source code.
+
+\section{Usage}
+
+\slnkcctr{} source code can be obtained
+from the GitHub repository\cite{filiboja:slnkcctr}.
+Refer to \slnkcctr{} documentation\cite{bartek:slnkcctrreadme}
+for setup and usage instructions.
+
+\section{Conclusions}
+
+What makes slinky one of the most popular toys is its simplicity
+and the fact that it can perform numerous tricks.
+
+We have implemented a prototype of \slinkyconductor{},
+a slinky-controlled music toy.
+\slinkyconductor{} is able to support slinky jugglers of all ages
+with simple sound effects to accompany their performance.
+
+Potential future development should focus on
+improving beat detection precision
+and extending the music output with more complex patterns.
+
+\pagebreak
+
+\begin{appendices}
+
+\section{Project mind map}
+\label{app:mindmap}
+% Bojana
+
+% "include in the written report also an updated mind map of your project!"
+% https://ucilnica.fri.uni-lj.si/mod/forum/discuss.php?d=11339
+
+Mind map is a visual representation of important data.
+The main concept appears in the centre of the mind map.
+Around it there are pieces of relevant information
+arranged in intuitively comprehensible patterns.
+The pieces of information may be represented by words,
+pictures or combinations of both.
+Mind map facilitates brainstorming on relevant information
+including related work, technology and potential issues.
+
+Figure \ref{fig:mind_map2} shows a \slinkyconductor{} project mind map
+conceived early in the development.
+
+\newpage
+\begin{sidewaysfigure}
+  \centering
+  \includegraphics[width=\textheight]{Slinky_conductor.pdf}
+  \caption{\slinkyconductor{} mind map}
+  \label{fig:mind_map2}
+\end{sidewaysfigure}
+\newpage
+
+\end{appendices}
+
+\bibliography{report}
+
+\printglossaries{}
+
+\end{document}
+
+%sagemathcloud={"zoom_width":100}

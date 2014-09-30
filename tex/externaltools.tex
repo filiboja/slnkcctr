@@ -1,0 +1,65 @@
+% `\input` in a section
+
+% Author: Filip Bartek
+
+\subsection{External software tools}
+\subsubsection{System components} \label{sec:systemcomponents}
+
+To facilitate development, we used several existing software libraries
+that provide parts of functionality in \slnkcctr{}.
+See a list in table \ref{tab:systemcomponents}.
+
+\begin{table}[h]
+\centering
+\begin{tabularx}{\linewidth}{X|X}
+Library & Functionality \\
+\hline
+\hline
+% Breaks just like in `breakurl` package (i.e. after dot and underscore)
+% http://ctan.ijs.si/tex-archive/macros/latex/contrib/breakurl/breakurl.pdf
+% http://www.boost.org/
+Boost.\allowbreak{}Program\_\allowbreak{}options
+& Command line ar\-gu\-ments, configuration files \\
+\hline
+% http://opencv.org/
+OpenCV & Object detection, \gls{gui} \\
+\hline
+% http://www.sfml-dev.org/
+\gls{sfml} & Sound playback
+\end{tabularx}
+\caption{System components}
+\label{tab:systemcomponents}
+\end{table}
+
+\subsubsection{Development tools}
+
+Throughout the development, we used several stand-alone tools
+and one C++ library to deal with various issues.
+See a list in table \ref{tab:devtools}.
+
+\begin{table}[h]
+\centering
+\begin{tabularx}{\linewidth}{X|X}
+Tool & Functionality \\
+\hline
+\hline
+% https://github.com/
+GitHub & Version control system \\
+\hline
+Microsoft Visual C++ 2010 Express & C++ \gls{ide} \\
+\hline
+% https://code.google.com/p/micro-profiler/
+MicroProfiler & C++ profiling (library) \\
+\hline
+% http://avidemux.org/
+Avidemux & Video file inspection \\
+\hline
+% http://www.videolan.org/vlc/
+VLC & Media file format conversion \\
+\hline
+% http://www.dependencywalker.com/
+Dependency Walker & Collecting run-time dependencies for a release
+\end{tabularx}
+\caption{Development tools}
+\label{tab:devtools}
+\end{table}

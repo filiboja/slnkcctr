@@ -1,0 +1,47 @@
+% `\input` in a section
+
+% Author: Filip Bartek
+
+\subsection{Beat detector}
+
+Beat detector collects a history (sliding window) of detected
+slinky end positions and estimates occurences of steps,
+i.e.~moments when the slinky end hits the juggler's hand.
+
+These moments are very easy to determine for a human
+observing the juggler
+and quite easy to determine for a human reading through a history of
+detected slinky end positions,
+but implementing a similar functionality in a computer
+proved to be quite difficult.
+
+The main factors that contribute to the difficulty
+of beat time estimation are:
+
+\begin{itemize}
+
+\item low time resolution of sampled positions
+(time resolution is limited by camera frame rate),
+
+\item low precision of sampled positions
+(caused by low precision of slinky end detection process,
+described in section \ref{sec:slinkyenddetector}) and
+
+\item noise in sampled positions
+(caused namely by parts of slinky obscuring the ends while juggling).
+
+\end{itemize}
+
+In the end we resorted to implementing a simple method
+optimized for a 15 FPS camera
+and a slinky with step period between
+$\frac{6}{15}$ and $\frac{12}{15}$ s.
+These values were chosen to work with the slinkys and camera
+we used for testing
+and we believe that
+most common slinkys and cameras satisfy these assumptions.
+
+As mentioned above,
+the beat detection process proved to be more difficult to implement
+than we originally expected
+and the current implementation presents a notable room for improvement.

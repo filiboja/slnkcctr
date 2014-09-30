@@ -1,0 +1,69 @@
+% `\input` in any level
+
+% Author: Filip Bartek
+
+\begin{minipage}{\linewidth}
+Project proposal\cite{bartek:proposal} describes the basic desired
+behavior of \slinkyconductor{}:
+
+\begin{itemize}
+\item when slinky is idle, so is \slinkyconductor{} and
+\item when slinky is ``walking'' down the hands of a juggler, \slinkyconductor{} plays back music synchronized to the steps of the slinky.
+\end{itemize}
+\end{minipage}
+
+We decided to pursue this behavior by implementing
+a system that consists of
+a computer that runs specialized software (called \slnkcctr{}) and has
+a video camera and a sound output device connected to it.
+The system (in real-time) tracks the position of slinky
+in image from camera,
+recognizes the phase in the slinky ``walking'' cycle and
+plays back music synchronized to this recognized phase.
+
+% TODO: Make a picture of components here.
+% * computer
+%     * slnkcctr software
+% * camera
+% * speakers
+% [FB] Suggestion: Use ntikz package.
+
+% TODO: Make a picture of software components here with information
+% flow (maybe).
+% * slinky position tracker
+% * beat recognizer
+% * sound player
+
+We decided to use this hardware setup because we feel it's
+familiar and affordable for many computer users.
+This approach also complements the low-price policy
+the original Slinky toy followed throughout most of its history
+on behalf of Betty James,
+the toy's inventor's wife.\cite[section History]{wiki:slinky}
+Indeed, slinky remains a notably affordable toy.\footnote{
+As of now,
+a package of 3 original Slinkys can be obtained
+for \$12.99\cite{poof:slinky}
+and the shop \emph{TojeTo} in Ljubljana carries Magic Spring,
+a good plastic Slinky duplicate,
+for \EUR{2.90}\cite{tojeto:slinky}.
+}
+
+For similar reasons, we decided to keep the project
+open source\footnote{
+The source code of \slnkcctr{} is publicly available
+from the \emph{GitHub}
+repository \texttt{filiboja/slnkcctr}\cite{filiboja:slnkcctr}.
+}
+and free to use.
+
+To facilitate visual tracking of the slinky,
+we decided to use a brightly colored plastic slinky
+instead of the traditional metal variant.
+For practical reasons, we further require the slinky to have
+different colors at its ends,
+and for the colors to be easily separable from background.
+We believe that these properties are not uncommon because
+most slinkys available around are rainbow-colored
+% TODO: Rewrite in a less informal manner.
+(see an example in figure \ref{fig:slinky-magic}).

@@ -1,0 +1,29 @@
+% `\input` in a section
+
+% Author: Filip Bartek
+
+\subsection{Architecture}
+
+\slnkcctr{} prototype consists of three main components:
+
+\begin{itemize}
+\item slinky end detector,
+\item beat detector and
+\item sound player.
+\end{itemize}
+
+The operation of the components is synchronized with the camera frames.
+
+In each frame and for each of the two ends of the slinky,
+a \emph{slinky end detector} tries to detect and localize
+the slinky end in the image.
+
+The presence indication and coordinates are then passed to
+a \emph{beat detector} which uses this information
+and previous values to determine whether
+a beat occurred in the current frame.
+
+In case a beat has occurred, \emph{sound player} is asked
+to play back a sound corresponding to the slinky end.
+
+% TODO: Optional: Make a picture of components.

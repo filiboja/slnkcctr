@@ -1,0 +1,31 @@
+% `input` in a section
+
+% Author: Filip Bartek
+
+\subsection{Slinky end detector}
+\label{sec:slinkyenddetector}
+% http://opencv-srf.blogspot.com/2010/09/object-detection-using-color-seperation.html
+
+Slinky end detection is performed using color filtering.
+OpenCV library is used in this step extensively.
+
+The detector takes an image and outputs an estimated position
+of an end of slinky in the image.
+If slinky end is not detected, a non-position is output.
+
+The detector consists of four filters:
+
+\begin{itemize}
+\item \texttt{CropFilter} (crops the image)
+\item \texttt{HsvFilter} (filters out some colors)
+\item \texttt{OpenFilter} (morphological opening)
+\item \texttt{CloseFilter} (morphological closing)
+\end{itemize}
+
+The filters select a part of the image, i.e.~a set of pixels.
+Slinky end position is determined as the centroid of this set.
+
+Each of the filters is parametrized by one or more numeric values.
+The parameters are exposed in \gls{gui} and configuration files.
+Refer to the \slnkcctr{} documentation\cite{bartek:slnkcctrreadme}
+for details.
